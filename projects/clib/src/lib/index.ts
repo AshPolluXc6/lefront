@@ -1,0 +1,1 @@
+export * from './rate-stars/rate-stars.component'
