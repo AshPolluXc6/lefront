@@ -1,0 +1,30 @@
+*{
+    box-sizing: border-box;
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 172px;
+    height: 42px;
+    background-color: white; 
+    position: relative;
+    overflow: visible;
+}
+
+.star-color {
+    border: solid #fff;
+    background-color: rgb(13, 78, 57); 
+    transition: width 0.5s ease;
+    z-index: 1;
+    width: 50%;
+    height: 100%; 
+}
+
+svg {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    bottom: 0px;
+}
+

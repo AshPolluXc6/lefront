@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AdminComponent } from "./admin/admin.component";
 import { ClientHomeComponent } from "./client/client-home/client-home.component";
+import { RateStarsComponent } from '../../projects/clib/src/lib';
 
 
 
@@ -9,7 +10,7 @@ import { ClientHomeComponent } from "./client/client-home/client-home.component"
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AdminComponent, ClientHomeComponent],
+  imports: [RouterOutlet, AdminComponent, ClientHomeComponent, RateStarsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
