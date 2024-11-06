@@ -3,6 +3,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
+      "clib": [
+        "./dist/clib"
+      ],
       "components": [
         "./dist/components"
       ],
