@@ -9,7 +9,7 @@ import { AnswerStandard } from "./answerstandard.service";
 
 export class ConnectionService {
 
-    private apiUrl = 'http://localhost:3000/api/';
+    private apiUrl = '/api/';
 
     constructor(private http: HttpClient) {}
 

@@ -29,6 +29,27 @@
     </section>
     <section class="critics">
         <lib-news><lib-rate-stars></lib-rate-stars></lib-news>
+        <p>Críticas</p>
+
+
+        
+        @if (publi.length > 0 && publi.flagcritica === 1) {
+            
+                <lib-frame>
+                    <img src="{{ publi.imagemcapa }}" alt="{{ publi.nome }}">
+                    <span>
+                        <p>{{ publi.nome }}</p>
+                        <lib-rate-stars></lib-rate-stars>
+                        @if (publi.flagcritica === 1) {
+                            <p>Crítica por [nome do crítico]</p>
+                        }
+                        <p>{{ publi.texto }}</p>
+                        <p class="data-critica">Data da crítica: {{ publi.dataalterado }}</p>
+                    </span>  
+                </lib-frame>
+            
+        }
+
     </section>
     </div>
     <footer></footer>
