@@ -56,10 +56,62 @@ header {
     width: 45%;
 
     .banner-content {
+        display: flex;
+        position: relative;
+        align-items: center;
+        flex-direction: column;
         width: 100%;
         height: 100%;
         border-radius: 0 0 20px 20px;
         background-color: black;
+        overflow: hidden;
+
+        .banner-img-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+
+            img {
+                height: auto;
+                max-height: 100%;
+                max-width: 100%;
+                // object-fit: cover;
+
+            }
+        }
+
+        .banner-img-container::after {
+            content:'';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgb(0,0,0);
+            background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(9,9,121,0) 50%, rgba(0,0,0,1) 100%);
+        }
+        
+        .banner-mv-controler {
+            left: 20px;
+            bottom:50px;
+            color: #fff;
+            font-size: 20px;
+            position: absolute;
+            z-index: 9999999999999;
+
+            .banner-mv-name {
+                font-weight: 700;
+            }
+        }
+
+        .banner-mv-nav {
+            color: #fff;
+            bottom:0px;
+            position: absolute;
+            z-index: 99999999999999;
+            display: flex;
+        }
 
         nav {
             height: 60px;
@@ -116,6 +168,62 @@ footer {
     background-color: black;
     width: 100%;
 }
+
+.banner-slider {
+    position: relative;
+    overflow: hidden;
+  
+    .banner-img-container {
+      display: flex;
+      transition: transform 0.5s ease;
+      img {
+        display: none;
+        width: 100%;
+      }
+      img.active {
+        display: block;
+      }
+    }
+  
+    .banner-mv-controler {
+      text-align: center;
+      margin-top: 10px;
+  
+      .banner-mv-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+    }
+  }
+  
+  .banner-mv-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  
+    div {
+      cursor: pointer;
+      font-size: 1.5rem;
+      margin: 0 5px;
+      color: #ccc;
+  
+      &.active {
+        color: #333;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .banner-img-container img {
+    display: none;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .banner-img-container img.active {
+    display: block;
+    opacity: 1;
+  }
+  
 
 // =================== critics Card =========
 .critic-card {

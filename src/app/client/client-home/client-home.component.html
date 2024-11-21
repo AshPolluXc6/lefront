@@ -1,61 +1,97 @@
-
 <main>
-    <header>
-        <span class="logo-control">
-            <img class="logo-img" src="\assets\sass\svg\Leparler-logo.svg" alt="">
-        </span>
-        
-        <nav class="menu-nav">
-            <ul>
-                <li>Quem Somos</li>
-                <li>Contato</li>
-                <li></li>
-            </ul>
-        </nav>
-    </header>
-    <div class="pannel">
-    <section class="news">
-    </section>
+  <header>
+    <span class="logo-control">
+      <img class="logo-img" src="\assets\sass\svg\Leparler-logo.svg" alt="" />
+    </span>
+
+    <nav class="menu-nav">
+      <ul>
+        <li>Quem Somos</li>
+        <li>Contato</li>
+        <li></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="pannel">
+    <section class="news"></section>
     <section class="banner">
-        <div class="banner-content">
-            <nav>
-                <ul>
-                    <li><a href="#">Jogos</a></li>
-                    <li><a href="#">Filmes</a></li>
-                    <li><a href="#">Series</a></li>
-                </ul>
-            </nav>
+      <div class="banner-content">
+        <nav>
+          <ul>
+            <li><a href="#">Jogos</a></li>
+            <li><a href="#">Filmes</a></li>
+            <li><a href="#">Series</a></li>
+          </ul>
+        </nav>
+
+        <div class="banner-slider">
+          <div class="banner-img-container">
+            @for (item of publiDestaques; track item.imagemcapa; let idx = $index) {
+            <img
+              src="{{ item.imagemcapa }}"
+              alt="{{ item.nome }}"
+              class="{{ idx === currentIndex ? 'active' : '' }}"
+            />
+            } @empty {
+            <p>There are no featured publications.</p>
+            }
+          </div>
+
+          <div class="banner-mv-controler">
+            @if (publiDestaques.length > 0) {
+            <p class="banner-mv-name">
+              {{ publiDestaques[currentIndex]?.nome }}
+            </p>
+            } @else {
+            <p>No publication selected.</p>
+            }
+          </div>
         </div>
+
+        <div class="banner-mv-nav">
+          @for (item of publiDestaques; track item.imagemcapa; let idx = $index) {
+          <div
+            class="{{ idx === currentIndex ? 'active' : '' }}"
+            (click)="goToSlide(idx)"
+          >
+            *
+          </div>
+          } 
+        </div>
+      </div>
     </section>
     <section class="critics">
-        <lib-news><lib-rate-stars></lib-rate-stars></lib-news>
-        <p>Críticas</p>
+      <lib-news><lib-rate-stars></lib-rate-stars></lib-news>
+      <p>Críticas</p>
 
-
-        @for (item of publi; track $index) { @if (publi.length > 0 && item.flagcritica == 1) {
-
-            <lib-frame>
-                <div class="critic-card">
-                    <img class='critic-img' src="{{ item.imagemcapa }}" alt="{{ item.nome }}">
-                    <span>
-                        <p class="movie-name">{{ item.nome }}</p>
-                        <lib-rate-stars></lib-rate-stars>
-                        <p class="nome-critico">Crítica por [nome do crítico]</p>
-                        <p class="data-critica">Data da crítica: {{ item.dataalterado }}</p>
-                    </span>
-                </div>  
-            </lib-frame>
-
-        }}
-
+      @for (item of publi; track $index) {
+        @if (publi.length > 0 && item.flagcritica == 1) {
+          <lib-frame>
+            <div class="critic-card">
+              <img
+                class="critic-img"
+                src="{{ item.imagemcapa }}"
+                alt="{{ item.nome }}"
+              />
+              <span>
+                <p class="movie-name">{{ item.nome }}</p>
+                <lib-rate-stars></lib-rate-stars>
+                <p class="nome-critico">Crítica por [nome do crítico]</p>
+                <p class="data-critica">Data da crítica: {{ item.dataalterado }}</p>
+              </span>
+            </div>
+          </lib-frame>
+        }
+      }
     </section>
-    </div>
-    <footer></footer>
+  </div>
+  <footer></footer>
 </main>
 <div class="user-nav">
-    <span class="user-img-control">
-        <img class="user-img" src="\assets\sass\svg\user-default.svg" alt="">
-    </span>
-    <p><a href="">Logar</a></p> |
-    <p><a href="">Registrar-se</a></p>
+  <span class="user-img-control">
+    <img class="user-img" src="\assets\sass\svg\user-default.svg" alt="" />
+  </span>
+  <p><a href="">Logar</a></p>
+  |
+  <p><a href="">Registrar-se</a></p>
 </div>
