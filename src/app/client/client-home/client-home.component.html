@@ -32,23 +32,21 @@
         <p>Críticas</p>
 
 
-        
-        @if (publi.length > 0 && publi.flagcritica === 1) {
-            
-                <lib-frame>
-                    <img src="{{ publi.imagemcapa }}" alt="{{ publi.nome }}">
+        @for (item of publi; track $index) { @if (publi.length > 0 && item.flagcritica == 1) {
+
+            <lib-frame>
+                <div class="critic-card">
+                    <img class='critic-img' src="{{ item.imagemcapa }}" alt="{{ item.nome }}">
                     <span>
-                        <p>{{ publi.nome }}</p>
+                        <p class="movie-name">{{ item.nome }}</p>
                         <lib-rate-stars></lib-rate-stars>
-                        @if (publi.flagcritica === 1) {
-                            <p>Crítica por [nome do crítico]</p>
-                        }
-                        <p>{{ publi.texto }}</p>
-                        <p class="data-critica">Data da crítica: {{ publi.dataalterado }}</p>
-                    </span>  
-                </lib-frame>
-            
-        }
+                        <p class="nome-critico">Crítica por [nome do crítico]</p>
+                        <p class="data-critica">Data da crítica: {{ item.dataalterado }}</p>
+                    </span>
+                </div>  
+            </lib-frame>
+
+        }}
 
     </section>
     </div>

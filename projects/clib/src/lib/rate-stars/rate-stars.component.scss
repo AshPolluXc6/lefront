@@ -10,6 +10,8 @@
     background-color: white; 
     position: relative;
     overflow: visible;
+    border: solid 1px;
+    scale: .6;
 }
 
 .star-color {
@@ -26,5 +28,6 @@ svg {
     width: 100%;
     left: 0px;
     bottom: 0px;
+    border:solid 1px;
 }
 

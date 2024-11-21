@@ -18,7 +18,7 @@ export class ClientHomeComponent {
 
 private endpoint = inject(ConnectionService);
 
-publi: any = {};
+publi: any[] = [];
 
 ngOnInit(): void {
   this.LoadData();
