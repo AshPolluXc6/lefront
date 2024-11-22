@@ -25,6 +25,7 @@
         </nav>
 
         <div class="banner-slider">
+
           <div class="banner-img-container">
             @for (item of publiDestaques; track item.imagemcapa; let idx = $index) {
             <img
@@ -58,6 +59,16 @@
           </div>
           } 
         </div>
+        <button id="banner-next">></button>
+        <div id="banner-prev"><</div>
+        <script>
+          let slider = document.querySelector('.banner-img-container');
+          let nextBtn = document.getElementById('banner-next');
+
+          nextBtn.onclick = () => {
+            slider.append(slider.querySelector('img:first-child'));
+          }
+        </script>
       </div>
     </section>
     <section class="critics">
