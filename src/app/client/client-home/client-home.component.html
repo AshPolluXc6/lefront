@@ -13,8 +13,11 @@
     </nav>
   </header>
   <div class="pannel">
+
     <section class="news"></section>
+
     <section class="banner">
+
       <div class="banner-content">
         <nav>
           <ul>
@@ -47,6 +50,7 @@
             <p>No publication selected.</p>
             }
           </div>
+
         </div>
 
         <div class="banner-mv-nav">
@@ -59,18 +63,12 @@
           </div>
           } 
         </div>
-        <button id="banner-next">></button>
-        <div id="banner-prev"><</div>
-        <script>
-          let slider = document.querySelector('.banner-img-container');
-          let nextBtn = document.getElementById('banner-next');
-
-          nextBtn.onclick = () => {
-            slider.append(slider.querySelector('img:first-child'));
-          }
-        </script>
+        <button id="banner-next"> > </button>
+        <button id="banner-prev"> < </button>
       </div>
+      
     </section>
+
     <section class="critics">
       <lib-news><lib-rate-stars></lib-rate-stars></lib-news>
       <p>Críticas</p>

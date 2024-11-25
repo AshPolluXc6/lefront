@@ -66,23 +66,6 @@ header {
         background-color: black;
         overflow: hidden;
 
-        .banner-img-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-
-            img {
-                height: auto;
-                max-height: 100%;
-                max-width: 100%;
-                // object-fit: cover;
-
-            }
-        }
-
         .banner-img-container::after {
             content:'';
             position: absolute;
@@ -171,17 +154,29 @@ footer {
 
 .banner-slider {
     position: relative;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    border: solid 1px red;
   
     .banner-img-container {
       display: flex;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      position: relative;
       transition: transform 0.5s ease;
+
       img {
+        height: auto;
+        max-height: 100%;
+        max-width: 100%;
         display: none;
-        width: 100%;
-      }
-      img.active {
-        display: block;
+        
+        &.active {
+            display: block;
+        }
       }
     }
   
@@ -214,20 +209,20 @@ footer {
     }
   }
 
-  #banner-next {
+  #banner-next, #banner-prev {
     position: absolute;
     color: #fff;
   }
 
-  .banner-img-container img {
-    display: none;
-    transition: opacity 0.5s ease-in-out;
-  }
+//   .banner-img-container img {
+//     display: none;
+//     transition: opacity 0.5s ease-in-out;
+//   }
   
-  .banner-img-container img.active {
-    display: block;
-    opacity: 1;
-  }
+//   .banner-img-container img.active {
+//     display: block;
+//     opacity: 1;
+//   }
   
 
 // =================== critics Card =========

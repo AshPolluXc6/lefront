@@ -42,4 +42,5 @@ export class ClientHomeComponent {
   goToSlide(index: number) {
     this.currentIndex = index;
   }
+  
 }
