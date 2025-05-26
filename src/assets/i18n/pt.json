@@ -1,0 +1,29 @@
+{
+  "LOGIN": {
+    "WELCOME": "Bem-vindo de volta",
+    "SIGNIN_MESSAGE": "Faça login para acessar sua conta",
+    "EMAIL": "E-mail",
+    "EMAIL_REQUIRED": "E-mail é obrigatório",
+    "EMAIL_INVALID": "Por favor, insira um endereço de e-mail válido",
+    "PASSWORD": "Senha",
+    "PASSWORD_REQUIRED": "Senha é obrigatória",
+    "PASSWORD_MINLENGTH": "A senha deve ter pelo menos 6 caracteres",
+    "REMEMBER_ME": "Lembrar-me",
+    "FORGOT_PASSWORD": "Esqueceu a senha?",
+    "SIGNIN": "Entrar",
+    "OR_CONTINUE_WITH": "ou continue com",
+    "SOCIAL": {
+      "GOOGLE": "Google",
+      "FACEBOOK": "Facebook",
+      "TWITTER": "Twitter",
+      "INSTAGRAM": "Instagram"
+    },
+    "NO_ACCOUNT": "Não tem uma conta?",
+    "SIGNUP": "Cadastre-se"
+  },
+  "VALIDATION": {
+    "REQUIRED": "{{field}} é obrigatório",
+    "EMAIL_INVALID": "Por favor, insira um endereço de e-mail válido",
+    "MIN_LENGTH": "{{field}} deve ter pelo menos {{length}} caracteres"
+  }
+}

@@ -1,0 +1,116 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>{{ 'LOGIN.WELCOME' | translate }}</h1> <!-- Welcome-->
+      <p>{{'LOGIN.SIGNIN_MESSAGE' | translate}}</p> <!-- Sign in to continue to your account -->
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          placeholder="Seu Email"
+          [class.input-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+        />
+        @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+          <div class="error-message">
+            @if (loginForm.get('email')?.errors?.['required']) {
+              <span> {{'VALIDATION.EMAIL_REQUIRED' | translate }} </span>
+            } @else if (loginForm.get('email')?.errors?.['email']) {
+              <span>{{'VALIDATION.EMAIL_INVALID' | translate }}</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password"> {{'LOGIN.PASSWORD' | translate }} </label>
+        <app-password-input 
+          formControlName="password"
+          placeholder="Sua Senha"
+          [class.input-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        ></app-password-input>
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <div class="error-message">
+            @if (loginForm.get('password')?.errors?.['required']) {
+              <span>{{'VALIDATION.PASSWORD_REQUIRED' | translate }}</span>
+            } @else if (loginForm.get('password')?.errors?.['minlength']) {
+              <span>{{'VALIDATION.PASSWORD_MINLENGTH' | translate }}</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-options">
+        <app-toggle-switch 
+          formControlName="rememberMe" 
+          label="Lembrar Acesso"
+        ></app-toggle-switch>
+        <a href="#" class="forgot-password">{{'LOGIN.FORGOT_PASSWORD' | translate }}</a>
+      </div>
+
+      @if (formError) {
+        <div class="form-error">
+          {{ formError }}
+        </div>
+      }
+
+      <button 
+        type="submit" 
+        class="login-button" 
+        [disabled]="loginForm.invalid || isSubmitting"
+        [class.loading]="isSubmitting"
+      >
+        @if (isSubmitting) {
+          <span class="spinner"></span>
+        }
+        {{'LOGIN.SIGNIN' | translate }}
+      </button>
+
+      <div class="divider">
+            <span> {{'LOGIN.OR_CONTINUE_WITH' | translate }}</span>
+      </div>
+
+      <div class="social-buttons">
+        <button type="button" class="social-button google" (click)="loginWithSocial('Google')">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+        </button>
+        <button type="button" class="social-button facebook" (click)="loginWithSocial('Facebook')">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" fill="#1877F2"/>
+          </svg>
+        </button>
+        <button type="button" class="social-button x-twitter" (click)="loginWithSocial('Twitter')">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/>
+          </svg>
+        </button>
+        <button type="button" class="social-button instagram" (click)="loginWithSocial('Instagram')">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.047 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.047-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.013 9.283 2 12 2zm0 1.802c-2.67 0-2.986.01-4.04.059-.976.045-1.505.207-1.858.344-.466.182-.8.398-1.15.748-.35.35-.566.684-.748 1.15-.137.353-.3.882-.344 1.857-.048 1.055-.058 1.37-.058 4.041 0 2.67.01 2.986.058 4.04.045.977.207 1.505.344 1.858.182.466.399.8.748 1.15.35.35.684.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058 2.67 0 2.987-.01 4.04-.058.977-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.684.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041 0-2.67-.01-2.986-.058-4.04-.045-.977-.207-1.505-.344-1.858a3.097 3.097 0 0 0-.748-1.15 3.098 3.098 0 0 0-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.055-.048-1.37-.058-4.041-.058zm0 3.063a5.135 5.135 0 1 1 0 10.27 5.135 5.135 0 0 1 0-10.27zm0 8.468a3.333 3.333 0 1 0 0-6.666 3.333 3.333 0 0 0 0 6.666zm6.538-8.469a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z" fill="url(#instagram-gradient)"/>
+            <defs>
+              <linearGradient id="instagram-gradient" x1="1.801" y1="22.199" x2="22.199" y2="1.801" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#FF3A44"/>
+                <stop offset=".5" stop-color="#FF3A44"/>
+                <stop offset="1" stop-color="#FFA233"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </button>
+      </div>
+
+      <div class="signup-link">
+        <span>{{'LOGIN.NO_ACCOUNT' | translate }}</span>
+        <a href="#">{{'LOGIN.SIGNUP' | translate }}</a>
+      </div>
+    </form>
+  </div>
+</div>

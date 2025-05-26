@@ -6,16 +6,15 @@ import { ClientHomeComponent } from './client-home/client-home.component';
 
 export const routes: Routes = [
 
-    {
-        path:"",
-        children:[
+    { path:"",
+         children:[
             {
                 path:"",
-                component: ClientHomeComponent,
-                data:{title:"Cliente"}
+                redirectTo: 'home',
+                 pathMatch: 'full'
             },
             {
-                path:"Cliente",
+                path:"home",
                 component: ClientHomeComponent,
                 data:{title:"Cliente"}
             }     

@@ -1,0 +1,14 @@
+
+<div class="review-card">
+    <div class="review-image">
+      <img [src]="imageSrc" alt="Review image">
+    </div>
+    <div class="review-content">
+      <p class="review-title">{{ title }}</p>
+      <app-star-rating [rating]="rating"></app-star-rating>
+      <div class="review-meta">
+        <span class="review-username">{{ username }}</span>
+        <span class="review-date">{{ reviewDate | date:'mediumDate' }}</span>
+      </div>
+    </div>
+</div>
