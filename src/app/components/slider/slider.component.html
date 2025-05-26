@@ -1,0 +1,29 @@
+<div class="portrait-slider-container"
+  (mouseenter)="stopAutoSlide()"
+  (mouseleave)="startAutoSlide()"
+>
+  
+
+    <div class="portrait-slider">
+      <div class="slide" *ngFor="let image of images;  let i = index;" [ngClass]="{'active': isActive(i)}">
+       <img [src]="image.src" [alt]="image.alt || 'Slide image'" class="slide-image" [ngClass]="{'active': isActive(i)}">
+      </div>
+    </div>
+  
+    <div class="nav-arrows">
+      <button class="arrow left-arrow" (click)="prevSlide()">
+        <span class="arrow-icon">&#10094;</span>
+      </button>
+      <button class="arrow right-arrow" (click)="nextSlide()">
+        <span class="arrow-icon">&#10095;</span>
+      </button>
+    </div>
+  
+    <div class="indicator-dots">
+      <div *ngFor="let image of images; let i = index" 
+           class="dot" 
+           [ngClass]="{'active': isActive(i)}"
+           (click)="goToSlide(i)">
+      </div>
+    </div>
+</div>

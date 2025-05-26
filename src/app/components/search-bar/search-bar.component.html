@@ -1,0 +1,15 @@
+<div class="search-container">
+    <div class="input-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        id="search"
+        required
+        placeholder=" "
+      >
+      <label for="search">Procure por filmes, séries, jogos e mais </label>
+    </div>
+    <button (click)="onSearch()" class="search-button">
+      <img src="assets/sass/svg/lupa.svg" alt="">
+    </button>
+  </div>

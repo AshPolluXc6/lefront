@@ -1,0 +1,38 @@
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+
+.star-container {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.star {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.star-empty {
+  color: #D3D3D3;
+}
+
+.star-filled {
+  color: #FFBE17;
+  transition: width 0.5s ease;
+}
+
+@media (max-width: 600px) {
+  .star-container {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}

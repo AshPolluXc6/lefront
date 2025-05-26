@@ -1,99 +1,84 @@
 <main>
-  <header>
+  <header [ngClass]="{ 'scrolled': isScrolled }">
     <span class="logo-control">
       <img class="logo-img" src="\assets\sass\svg\Leparler-logo.svg" alt="" />
     </span>
 
     <nav class="menu-nav">
       <ul>
+        <li >
+          <a routerLink="/home" routerLinkActive="active">Home</a>
+        </li>
         <li>Quem Somos</li>
         <li>Contato</li>
-        <li></li>
       </ul>
     </nav>
   </header>
   <div class="pannel">
-    <section class="news"></section>
-    <section class="banner">
-      <div class="banner-content">
-        <nav>
-          <ul>
-            <li><a href="#">Jogos</a></li>
-            <li><a href="#">Filmes</a></li>
-            <li><a href="#">Series</a></li>
-          </ul>
-        </nav>
+    <section class="news">
 
-        <div class="banner-slider">
-
-          <div class="banner-img-container">
-            @for (item of publiDestaques; track item.imagemcapa; let idx = $index) {
-            <img
-              src="{{ item.imagemcapa }}"
-              alt="{{ item.nome }}"
-              class="{{ idx === currentIndex ? 'active' : '' }}"
-            />
-            } @empty {
-            <p>There are no featured publications.</p>
-            }
-          </div>
-
-          <div class="banner-mv-controler">
-            @if (publiDestaques.length > 0) {
-            <p class="banner-mv-name">
-              {{ publiDestaques[currentIndex]?.nome }}
-            </p>
-            } @else {
-            <p>No publication selected.</p>
-            }
-          </div>
-        </div>
-
-        <div class="banner-mv-nav">
-          @for (item of publiDestaques; track item.imagemcapa; let idx = $index) {
-          <div
-            class="{{ idx === currentIndex ? 'active' : '' }}"
-            (click)="goToSlide(idx)"
-          >
-            *
-          </div>
-          } 
-        </div>
-        <button id="banner-next">></button>
-        <div id="banner-prev"><</div>
-        <script>
-          let slider = document.querySelector('.banner-img-container');
-          let nextBtn = document.getElementById('banner-next');
-
-          nextBtn.onclick = () => {
-            slider.append(slider.querySelector('img:first-child'));
-          }
-        </script>
+      <app-search-bar (search)="handleSearch($event)"></app-search-bar>
+      <div class="results" *ngIf="searchResults.length > 0">
+        <p>Found {{searchResults.length}} results for: {{lastSearchTerm}}</p>
+        <ul>
+          <li *ngFor="let result of searchResults">{{ result }}</li>
+        </ul>
       </div>
-    </section>
-    <section class="critics">
-      <lib-news><lib-rate-stars></lib-rate-stars></lib-news>
-      <p>Críticas</p>
 
-      @for (item of publi; track $index) {
-        @if (publi.length > 0 && item.flagcritica == 1) {
-          <lib-frame>
-            <div class="critic-card">
-              <img
-                class="critic-img"
-                src="{{ item.imagemcapa }}"
-                alt="{{ item.nome }}"
-              />
-              <span>
-                <p class="movie-name">{{ item.nome }}</p>
-                <lib-rate-stars></lib-rate-stars>
-                <p class="nome-critico">Crítica por [nome do crítico]</p>
-                <p class="data-critica">Data da crítica: {{ item.dataalterado }}</p>
-              </span>
-            </div>
-          </lib-frame>
-        }
-      }
+      <p class="section-name news-section-title">Ultimas Noticias</p>
+      <app-news-card></app-news-card>
+      <app-news-card></app-news-card>
+      <app-news-card></app-news-card>
+    </section>
+    <section class="banner">
+      <nav class="banner-nav">
+        <ul class="banner-nav-items">
+          @for (categoria of categorias; track $index) {
+          <li
+          class="banner-nav-items-type"
+          [ngClass]="{ active: categoria === categoriaAtiva }"
+          (click)="selecionarCategoria(categoria)"
+        >{{ categoria }}</li>}
+        </ul>
+      </nav>
+
+      <app-slider
+       [images]="imagens"
+      >
+      </app-slider>
+
+    </section>
+   
+    <section class="critics">
+      <p class="section-name">Em cartaz</p>
+
+      <app-movie-showcase>   
+      </app-movie-showcase>
+
+      <p class="section-name" >Ultimas Criticas</p>
+      <div class="review-container">
+        <app-review-card
+          [imageUrl]="'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
+          [title]="'A Noite Dos Lobisomens tesssssssss'"
+          [rating]="4.6"
+          [username]="'Brendou Dias'"
+          [reviewDate]="reviewDate1">
+        ></app-review-card>
+        <app-review-card
+          [imageUrl]="'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
+          [title]="'A Noite Dos Lobisomens tesssssssss'"
+          [rating]="2.2"
+          [username]="'Brendou Dias'"
+          [reviewDate]="reviewDate1">
+        ></app-review-card>
+        <app-review-card
+          [imageUrl]="'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
+          [title]="'A Noite Dos Lobisomens tesssssssss'"
+          [rating]="2.2"
+          [username]="'Brendou Dias'"
+          [reviewDate]="reviewDate1">
+        ></app-review-card>
+    </div>
     </section>
   </div>
   <footer></footer>
@@ -102,7 +87,6 @@
   <span class="user-img-control">
     <img class="user-img" src="\assets\sass\svg\user-default.svg" alt="" />
   </span>
-  <p><a href="">Logar</a></p>
-  |
-  <p><a href="">Registrar-se</a></p>
+  <a href="#"><button class="button-logar">Logar</button></a>
+  <a href="#"><button class="button-especial">Registrar-se</button></a>
 </div>
