@@ -27,9 +27,9 @@
   
   
   .card-image {
-    width: 100%;
     overflow: hidden;
-
+    width: 50px;
+    border: solid 1px red;
   }
   
   .card-image img {

@@ -5,8 +5,15 @@
   
 
     <div class="portrait-slider">
-      <div class="slide" *ngFor="let image of images;  let i = index;" [ngClass]="{'active': isActive(i)}">
-       <img [src]="image.src" [alt]="image.alt || 'Slide image'" class="slide-image" [ngClass]="{'active': isActive(i)}">
+      <div 
+      class="slide" 
+      *ngFor="let image of images;  let i = index;"
+      [class.active]="i === currentIndex">
+       <img 
+       [src]="image.src" 
+       [alt]="image.alt || 'Slide image'" 
+       class="slide-image" 
+       [class.active]="i === currentIndex">
       </div>
     </div>
   

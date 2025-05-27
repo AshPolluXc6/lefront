@@ -1,14 +1,14 @@
 
-<div class="review-card">
+<div class="review-card" *ngFor="let data of data">
     <div class="review-image">
-      <img [src]="imageSrc" alt="Review image">
+      <img [src]="data.image || defaultImage" alt="Review image">
     </div>
     <div class="review-content">
-      <p class="review-title">{{ title }}</p>
-      <app-star-rating [rating]="rating"></app-star-rating>
+      <p class="review-title">{{ data.title }}</p>
+      <app-star-rating [rating]="data.rating"></app-star-rating>
       <div class="review-meta">
-        <span class="review-username">{{ username }}</span>
-        <span class="review-date">{{ reviewDate | date:'mediumDate' }}</span>
+        <span class="review-username">{{ data.username }}</span>
+        <span class="review-date">{{ data.reviewDate | date:'mediumDate' }}</span>
       </div>
     </div>
 </div>

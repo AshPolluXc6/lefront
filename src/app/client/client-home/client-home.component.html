@@ -26,13 +26,10 @@
       </div>
 
       <p class="section-name news-section-title">Ultimas Noticias</p>
-      <app-news-card></app-news-card>
-      <app-news-card></app-news-card>
-      <app-news-card></app-news-card>
+      <app-news-card [data]="dataNews"></app-news-card>
+
     </section>
     <section class="banner"
-      (mouseenter)="isSliding = false"
-      (mouseleave)="isSliding = true"
       style="border: 2px solid;"
     >
       <nav class="banner-nav">
@@ -47,7 +44,7 @@
       </nav>
 
       <app-slider
-      [images]="imagens"
+      [images]="dataSlider"
       >
       </app-slider>
 
@@ -56,31 +53,15 @@
     <section class="critics">
       <p class="section-name">Em cartaz</p>
 
-      <app-movie-showcase>   
+      <app-movie-showcase
+      [movies]="dataMS"
+      >   
       </app-movie-showcase>
 
       <p class="section-name" >Ultimas Criticas</p>
-      <div class="review-container">
+      <div class="review-container">   
         <app-review-card
-          [imageUrl]="'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
-          [title]="'A Noite Dos Lobisomens tesssssssss'"
-          [rating]="4.6"
-          [username]="'Brendou Dias'"
-          [reviewDate]="reviewDate1">
-        ></app-review-card>
-        <app-review-card
-          [imageUrl]="'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
-          [title]="'A Noite Dos Lobisomens tesssssssss'"
-          [rating]="2.2"
-          [username]="'Brendou Dias'"
-          [reviewDate]="reviewDate1">
-        ></app-review-card>
-        <app-review-card
-          [imageUrl]="'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
-          [title]="'A Noite Dos Lobisomens tesssssssss'"
-          [rating]="2.2"
-          [username]="'Brendou Dias'"
-          [reviewDate]="reviewDate1">
+          [data]="dataRWCard"
         ></app-review-card>
     </div>
     </section>

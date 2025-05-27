@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy,  ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy,  ChangeDetectorRef, NgZone, Input } from '@angular/core';
 
 interface Movie {
   title: string;
@@ -17,40 +17,13 @@ interface Movie {
   styleUrl: './movie-showcase.component.scss'
 })
 export class MovieShowcaseComponent implements OnInit, OnDestroy {
+
+   @Input() movies: Movie[] = [];
+
   constructor(
       private cdRef: ChangeDetectorRef,
       private ngZone: NgZone
-    ) {}
- movies: Movie[] = [
-    {
-      title: 'Inception',
-      image: 'https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg',
-      rating: '12',
-      duration: '148 min',
-      category: 'Sci-Fi'
-    },
-    {
-      title: 'The Dark Knight',
-      image: 'https://images.pexels.com/photos/2873486/pexels-photo-2873486.jpeg',
-      rating: '14',
-      duration: '152 min',
-      category: 'Action'
-    },
-    {
-      title: 'La La Land',
-      image: 'https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg',
-      rating: 'L',
-      duration: '128 min',
-      category: 'Musical'
-    },
-    {
-      title: 'Parasite',
-      image: 'https://images.pexels.com/photos/2507025/pexels-photo-2507025.jpeg',
-      rating: '16',
-      duration: '132 min',
-      category: 'Drama'
-    }
-  ];
+  ) {}
 
   activeIndex = 0;
   private intervalId: any;

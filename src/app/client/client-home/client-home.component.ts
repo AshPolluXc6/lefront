@@ -1,27 +1,20 @@
 import { Component, inject, HostListener, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgClass } from '@angular/common';
-import { RateStarsComponent } from '../../../../projects/clib/src/lib';
-import { NewsComponent } from '../../../../projects/clib/src/lib/news/news.component';
-import { FrameComponent } from "../../../../projects/clib/src/lib/frame/frame.component";
 import { ConnectionService } from '../../services/connection.service';
-import { AnswerStandard } from '../../services/answerstandard.service';
 import { NewsCardComponent } from '../../components/news-card/news-card.component';
 import { MovieShowcaseComponent } from '../../components/movie-showcase/movie-showcase.component';
 import { SliderComponent } from '../../components/slider/slider.component';
 import { ReviewCardComponent } from '../../components/review-card/review-card.component';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
-import { LoginComponent } from '../../components/login/login.component';
 import { ApiService } from '../../core/services/api.service';
 import { Queries } from '../../core/querys/queries';
+
 
 @Component({
   selector: 'app-client-home',
   standalone: true,
   imports: [
-    RateStarsComponent, 
-    NewsComponent, 
-    FrameComponent, 
     NewsCardComponent, 
     MovieShowcaseComponent, 
     SliderComponent, 
@@ -30,7 +23,6 @@ import { Queries } from '../../core/querys/queries';
     SearchBarComponent,
     CommonModule,
     RouterModule,
-    LoginComponent,
    ],
   templateUrl: './client-home.component.html',
   styleUrls: ['./client-home.component.scss'],
@@ -53,10 +45,13 @@ export class ClientHomeComponent implements OnInit {
   private endpoint = inject(ConnectionService);
 
   data: any[] = [];
+  dataMS: any[] = [];
+  dataSlider: any[] = [];
+  dataRWCard: any[] = [];
+  dataNews: any[] = [];
+
   dataDestaques: any[] = [];
   currentIndex: number = 0;
-  
-  isSliding: boolean = true;
 
   categorias = ['Filmes', 'Series', 'Jogos'];
   categoriaAtiva = 'Filmes';
@@ -76,29 +71,80 @@ export class ClientHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    // this.loadData2();
   }
   
-  loadData(): void {
-    const sql = Queries.publicacao.selectAll;
+  // loadData(): void {
+  //   const sql = Queries.publicacao.selectAll;
 
-    this.apiservice.query<any[]>(sql).subscribe({
-      next:(res) => {
-        this.data= res;
-        console.log(res);
-        console.log(this.data);
-      },
-       error: (err) => {
-        console.error(err);
+  //   this.apiservice.query<any[]>(sql).subscribe({
+  //     next:(res) => {
+  //       this.data= res;
+  //       console.log(res);
+  //       console.log(this.data);
+  //     },
+  //      error: (err) => {
+  //       console.error(err);
+  //     }
+  //   });
+  // }
+
+  loadData(): void {
+  const sql = Queries.publicacao.selectAll;
+
+  this.apiservice.query<any[]>(sql).subscribe({
+    next: (res) => {
+      this.data = res;
+      this.dataMS = this.mapToMovieShowcase(res);
+      this.dataSlider = this.mapToSlider(res);
+      this.dataNews = this.mapToNews(res);
+      if(res.some(item => item.flagcritica === 1)) {
+      this.dataRWCard = this.mapToRWCard(res);
       }
-    });
+
+      console.log('Dados carregados:', res);
+    },
+    error: (err) => console.error('Erro ao carregar:', err)
+    }); 
   }
 
-  get imagens(): { src: string; alt?: string }[] {
-    return this.data.map(item => ({
-      src: item.imagemcapa,
-      alt: item.nome 
-    }));
-  } 
+private mapToMovieShowcase(data: any[]): any[] {
+  return data.map(item => ({
+    title: item.nome,
+    image: item.imagemcapa,
+    rating: item.nota,
+    duration: item.datacadastro,
+    category: item.publicacao_id
+  }));
+}
+
+private mapToSlider(data: any[]): any[] {
+  return data.map(item => ({
+    src: item.imagemcapa,
+    alt: item.nome
+  }))
+}
+private mapToRWCard(data: any[]): any[] {
+  return data.map(item => ({
+      title: item.nome,
+      image: item.imagemcapa,
+      rating: item.nota,
+      duration: item.duracao, 
+      category: item.categoria,
+      flagcritica: item.flagcritica
+  }))
+}
+private mapToNews(data: any[]): any[] {
+  return data.map(item => ({
+      title: item.nome,
+      image: item.imagemcapa,
+      category: item.publicacao_id,
+      date: item.dataalterado,
+      readtime: item.readtime, 
+      description: item.nome
+  }))
+}
+
 
   handleSearch(term:string){
     this.lastSearchTerm = term;
