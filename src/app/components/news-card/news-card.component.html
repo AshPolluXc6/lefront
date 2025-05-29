@@ -10,7 +10,7 @@
             <h4 class="card-title">{{item.category}}</h4>
           </div>
           <div class="card-meta-block">
-            <p class="card-category">{{item.date}}</p>
+            <p class="card-category">{{item.date | date:'d \'de\' MMM \' yyyy':'pt'}}</p>
             <p class="card-date"> {{item.readTime}} </p>
           </div>
         </div>

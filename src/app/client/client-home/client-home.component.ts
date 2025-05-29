@@ -30,7 +30,7 @@ import { Queries } from '../../core/querys/queries';
 export class ClientHomeComponent implements OnInit {
   
   @ViewChild(SliderComponent) sliderComponent!: SliderComponent;
-  onMouseEnter() {
+    onMouseEnter() {
       this.sliderComponent.stopAutoSlide();
     }
     onMouseLeave() {
