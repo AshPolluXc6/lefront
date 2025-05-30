@@ -22,8 +22,12 @@
     "SIGNUP": "Cadastre-se"
   },
   "VALIDATION": {
-    "REQUIRED": "{{field}} é obrigatório",
+    "REQUIRED": "Campo obrigatório",
     "EMAIL_INVALID": "Por favor, insira um endereço de e-mail válido",
     "MIN_LENGTH": "{{field}} deve ter pelo menos {{length}} caracteres"
+  },
+  "FIELDS": {
+    "PASSWORD": "Senha",
+    "EMAIL": "E-mail"
   }
 }

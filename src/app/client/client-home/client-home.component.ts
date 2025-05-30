@@ -9,6 +9,7 @@ import { ReviewCardComponent } from '../../components/review-card/review-card.co
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { ApiService } from '../../core/services/api.service';
 import { Queries } from '../../core/querys/queries';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class ClientHomeComponent implements OnInit {
 
   constructor(
     private apiservice: ApiService, 
+    private route: Router,
   ){}
     
   private endpoint = inject(ConnectionService);
@@ -174,5 +176,7 @@ private mapToNews(data: any[]): any[] {
   goToSlide(index: number) {
     this.currentIndex = index;
   }
-  
+  toLogin() {
+    this.route.navigate(['/login'])
+  }
 }

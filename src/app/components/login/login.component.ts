@@ -23,7 +23,7 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit{
-   loginForm: FormGroup;
+  loginForm: FormGroup;
   isSubmitting = false;
   formError: string | null = null;
 
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit{
     private router: Router
   ) {
      this.loginForm = this.fb.group({
-      email: [''],
+      email: ['',[Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false]
     });

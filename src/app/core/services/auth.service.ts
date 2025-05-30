@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
-import { BehaviorSubject, of, timer, Subscription } from 'rxjs';
+import { BehaviorSubject, of, timer, Subscription, from } from 'rxjs';
+import { ClientInfoUtil } from '../untils/cliente-info.until';
 
 @Injectable({ providedIn: 'root' })
 
@@ -27,11 +28,29 @@ export class AuthService {
         return this.storage.getRefreshToken();
     }
 
-  login(credentials: { user: string; pass: string }) {
-    return this.http.post<{ access_token: string; refresh_token: string }>(
-       `${this.API_URL}/login`,
-      credentials
-    ).pipe(
+  // login(credentials: { user: string; pass: string }) {
+
+  //   return this.http.post<{ access_token: string; refresh_token: string }>(
+  //      `${this.API_URL}/login`,
+  //     credentials
+  //   ).pipe(
+  //     tap(({ access_token, refresh_token }) => {
+  //       this.storage.setTokens(access_token, refresh_token);
+  //       this.scheduleTokenRefresh();
+  //     })
+  //   );
+
+  // }
+
+   login(credentials: { user: string; pass: string }) {
+    return from(ClientInfoUtil.getClientInfo()).pipe(
+      switchMap(clientInfo => {
+        this.storage.setClientInfo(clientInfo);
+        return this.http.post<{ access_token: string; refresh_token: string }>(
+          `${this.API_URL}/login`,
+          credentials
+        );
+      }),
       tap(({ access_token, refresh_token }) => {
         this.storage.setTokens(access_token, refresh_token);
         this.scheduleTokenRefresh();
