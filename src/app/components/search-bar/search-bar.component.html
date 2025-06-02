@@ -1,4 +1,4 @@
-<div class="search-container">
+<div class="search-container" (clickOutside)="closeResults()">
     <div class="input-group">
       <input 
         type="text" 
@@ -13,3 +13,9 @@
       <img src="assets/sass/svg/lupa.svg" alt="">
     </button>
   </div>
+  <div class="results-container"  *ngIf="showResults && searchResults.length > 0" >
+  <app-search-item
+    *ngFor="let item of searchResults"
+    [result]="item"
+></app-search-item>
+</div>

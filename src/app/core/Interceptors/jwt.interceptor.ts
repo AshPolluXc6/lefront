@@ -45,14 +45,20 @@ function handle401Error(
         auth.isRefreshing = false;
         auth.refreshTokenSubject.next(tokens?.access_token || null);
 
-        const newAccessToken = auth.getAccessToken();
-        const newRequest = newAccessToken
-          ? request.clone({
-              setHeaders: {
-                Authorization: `Bearer ${newAccessToken}`
-              }
-            })
-          : request;
+        // const newAccessToken = auth.getAccessToken();
+        // const newRequest = newAccessToken
+        //   ? request.clone({
+        //       setHeaders: {
+        //         Authorization: `Bearer ${newAccessToken}`
+        //       }
+        //     })
+        //   : request;
+        const newRequest = tokens.access_token? request.clone({
+        setHeaders: {
+        Authorization: `Bearer ${tokens.access_token}`
+      }
+    })
+  : request;
 
         return next(newRequest);
       }),

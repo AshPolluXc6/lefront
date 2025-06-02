@@ -17,13 +17,7 @@
   <div class="pannel">
     <section class="news">
 
-      <app-search-bar (search)="handleSearch($event)"></app-search-bar>
-      <div class="results" *ngIf="searchResults.length > 0">
-        <p>Found {{searchResults.length}} results for: {{lastSearchTerm}}</p>
-        <ul>
-          <li *ngFor="let result of searchResults">{{ result }}</li>
-        </ul>
-      </div>
+      <app-search-bar (search)="handleSearch($event)" [searchResults]="searchResults"></app-search-bar>
 
       <p class="section-name news-section-title">Ultimas Noticias</p>
       <app-news-card [data]="dataNews"></app-news-card>

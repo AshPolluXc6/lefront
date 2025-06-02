@@ -9,8 +9,8 @@
     overflow: hidden;
     padding: 0 8px;
     margin-bottom: 15px;
-    border: solid 1px tomato;
     min-width: 400px;
+    text-overflow: ellipsis;
   }
   
   .card {
@@ -20,8 +20,8 @@
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
-    border: solid 1px;
     cursor: pointer;
+    text-overflow: ellipsis;
 
     &:hover .card-body p {
         color: #FFBE17;
@@ -33,7 +33,6 @@
   .card-image {
     overflow: hidden;
     flex: 1;
-    border: solid 1px red;
   }
   
   .card-image img {

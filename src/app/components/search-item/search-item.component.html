@@ -1,0 +1,14 @@
+<div class="result-item">
+  <div class="thumbnail">
+    <img [src]="result.thumbnail" [alt]="result.title">
+  </div>
+  <div class="content">
+    <div class="header">
+      <h3 class="title">{{ result.title }}</h3>
+    </div>
+    <div class="meta">
+        <span class="date">{{ formatDate(result.date) }}</span>
+        <span class="category">{{ result.category }}</span>    
+    </div>
+  </div>
+</div>

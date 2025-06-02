@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
-import { BehaviorSubject, of, timer, Subscription, from } from 'rxjs';
+import { BehaviorSubject, of, timer, Subscription, from, } from 'rxjs';
 import { ClientInfoUtil } from '../untils/cliente-info.until';
+
 
 @Injectable({ providedIn: 'root' })
 
@@ -17,7 +18,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService
+    private storage: StorageService,
+    private clientInfoUtil: ClientInfoUtil
   ) {}
 
     getAccessToken(): string | null {
@@ -43,9 +45,12 @@ export class AuthService {
   // }
 
    login(credentials: { user: string; pass: string }) {
-    return from(ClientInfoUtil.getClientInfo()).pipe(
-      switchMap(clientInfo => {
-        this.storage.setClientInfo(clientInfo);
+    return this.clientInfoUtil.getClientInfo().pipe(
+      tap(clientInfo => {
+        console.log('Client Info:', clientInfo);
+        localStorage.setItem('client_info', JSON.stringify(clientInfo));
+      }),
+      switchMap(() => {
         return this.http.post<{ access_token: string; refresh_token: string }>(
           `${this.API_URL}/login`,
           credentials

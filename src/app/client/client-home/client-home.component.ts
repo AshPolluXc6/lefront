@@ -10,21 +10,23 @@ import { SearchBarComponent } from '../../components/search-bar/search-bar.compo
 import { ApiService } from '../../core/services/api.service';
 import { Queries } from '../../core/querys/queries';
 import { Router } from '@angular/router';
+import { SearchItemComponent, SearchResult } from '../../components/search-item/search-item.component';
 
 
 @Component({
   selector: 'app-client-home',
   standalone: true,
   imports: [
-    NewsCardComponent, 
-    MovieShowcaseComponent, 
-    SliderComponent, 
-    NgClass, 
+    NewsCardComponent,
+    MovieShowcaseComponent,
+    SliderComponent,
+    NgClass,
     ReviewCardComponent,
     SearchBarComponent,
     CommonModule,
     RouterModule,
-   ],
+    SearchItemComponent
+],
   templateUrl: './client-home.component.html',
   styleUrls: ['./client-home.component.scss'],
 })
@@ -63,7 +65,7 @@ export class ClientHomeComponent implements OnInit {
   reviewDate3 = new Date(2024, 0, 20);
   isScrolled = false;
 
-  searchResults: string[] = [];
+  searchResults: SearchResult[] = [];
   lastSearchTerm: string = '';
 
   @HostListener('window:scroll', [])
@@ -103,7 +105,7 @@ export class ClientHomeComponent implements OnInit {
       if(res.some(item => item.flagcritica === 1)) {
       this.dataRWCard = this.mapToRWCard(res);
       }
-
+      this.searchResults = this.mapToResults(res);
       console.log('Dados carregados:', res);
     },
     error: (err) => console.error('Erro ao carregar:', err)
@@ -146,17 +148,32 @@ private mapToNews(data: any[]): any[] {
       description: item.nome
   }))
 }
+private mapToResults(data: any[]): any[]{
+  return data.map(item =>({
+    id: item.publicacao_id,
+    title: item.nome,
+    thumbnail: item.imagemcapa,
+    date: item.dataalterado,
+    category: item.categoria_id,
+    relevanceScore: item.nota 
+  }))
+}
 
+  handleSearch(term: string) {
+  this.lastSearchTerm = term.trim().toLowerCase();
 
-  handleSearch(term:string){
-    this.lastSearchTerm = term;
-
-    this.searchResults = [
-      `Result 1 for "${term}"`,
-      `Result 2 for "${term}"`,
-      `Result 3 for "${term}"`
-    ];
+  if (this.lastSearchTerm === '') {
+    // Se limpar a busca, volta os dados completos
+    this.searchResults = this.mapToResults(this.data);
+    return;
   }
+
+  this.searchResults = this.mapToResults(
+    this.data.filter(item =>
+      item.nome.toLowerCase().includes(this.lastSearchTerm)
+    )
+  );
+}
 
   selecionarCategoria(categoria: string) {
     this.categoriaAtiva = categoria;
