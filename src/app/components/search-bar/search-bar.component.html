@@ -1,21 +1,52 @@
-<div class="search-container" (clickOutside)="closeResults()">
-    <div class="input-group">
-      <input 
-        type="text" 
-        [(ngModel)]="searchTerm"
-        id="search"
-        required
-        placeholder=" "
-      >
-      <label for="search">Procure por filmes, séries, jogos e mais </label>
-    </div>
-    <button (click)="onSearch()" class="search-button">
-      <img src="assets/sass/svg/lupa.svg" alt="">
-    </button>
+<div class="search-container">
+  <div class="input-group">
+    <input 
+      type="text"
+      [formControl]="searchControl"
+      (keydown.enter)="onSearch()"
+      placeholder=""
+    >
+    <label>Procure por filmes, séries, jogos e mais</label>
   </div>
-  <div class="results-container"  *ngIf="showResults && searchResults.length > 0" >
-  <app-search-item
-    *ngFor="let item of searchResults"
-    [result]="item"
-></app-search-item>
+
+  <button class="search-button" (click)="onSearch()">
+    <img src="assets/sass/svg/lupa.svg" alt="">
+  </button>
 </div>
+
+<div class="results-container" *ngIf="showResults && searchResults.length > 0">
+  @defer (when showResults) {
+    <app-search-item 
+      *ngFor="let item of searchResults" 
+      [result]="item">
+    </app-search-item>
+  } @loading {
+    <p>Carregando...</p>
+  } @error {
+    <p>Erro ao carregar</p>
+  }
+</div>
+
+
+<!-- <div class="search-container">
+  <div class="input-group">
+    <input
+      type="text"
+      [formControl]="searchControl"
+      placeholder="Procure por filmes, séries, jogos e mais"
+    />
+  </div>
+</div>
+
+<div class="results-container" *ngIf="showResults && searchResults.length > 0">
+  @defer (when showResults) {
+    <app-search-item
+      *ngFor="let item of searchResults"
+      [result]="item"
+    ></app-search-item>
+  } @loading {
+    <p>Carregando...</p>
+  } @error {
+    <p>Erro ao carregar</p>
+  }
+</div> -->

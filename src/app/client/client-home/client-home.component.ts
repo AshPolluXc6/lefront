@@ -10,7 +10,7 @@ import { SearchBarComponent } from '../../components/search-bar/search-bar.compo
 import { ApiService } from '../../core/services/api.service';
 import { Queries } from '../../core/querys/queries';
 import { Router } from '@angular/router';
-import { SearchItemComponent, SearchResult } from '../../components/search-item/search-item.component';
+import { SearchItemComponent, SearchResult } from '../../components/search-item/search-Item.component';
 
 
 @Component({
@@ -53,6 +53,7 @@ export class ClientHomeComponent implements OnInit {
   dataSlider: any[] = [];
   dataRWCard: any[] = [];
   dataNews: any[] = [];
+  dataFilter: any[] = [];
 
   dataDestaques: any[] = [];
   currentIndex: number = 0;
@@ -105,7 +106,7 @@ export class ClientHomeComponent implements OnInit {
       if(res.some(item => item.flagcritica === 1)) {
       this.dataRWCard = this.mapToRWCard(res);
       }
-      this.searchResults = this.mapToResults(res);
+      this.dataFilter = this.mapToResults(res);
       console.log('Dados carregados:', res);
     },
     error: (err) => console.error('Erro ao carregar:', err)
@@ -159,20 +160,8 @@ private mapToResults(data: any[]): any[]{
   }))
 }
 
-  handleSearch(term: string) {
-  this.lastSearchTerm = term.trim().toLowerCase();
-
-  if (this.lastSearchTerm === '') {
-    // Se limpar a busca, volta os dados completos
-    this.searchResults = this.mapToResults(this.data);
-    return;
-  }
-
-  this.searchResults = this.mapToResults(
-    this.data.filter(item =>
-      item.nome.toLowerCase().includes(this.lastSearchTerm)
-    )
-  );
+handleSearch(results: SearchResult[]) {
+  this.searchResults = results;
 }
 
   selecionarCategoria(categoria: string) {

@@ -17,7 +17,7 @@
   <div class="pannel">
     <section class="news">
 
-      <app-search-bar (search)="handleSearch($event)" [searchResults]="searchResults"></app-search-bar>
+      <app-search-bar (result)="handleSearch($event)" [data]="dataFilter"></app-search-bar>
 
       <p class="section-name news-section-title">Ultimas Noticias</p>
       <app-news-card [data]="dataNews"></app-news-card>

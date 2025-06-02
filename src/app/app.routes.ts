@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
 import { LoginPageComponent } from './core/auth/login-page/login-page.component';
+import { AuthGuard } from './core/guards/guard.service';
 
 export const routes: Routes = [
 
@@ -18,12 +19,14 @@ export const routes: Routes = [
                 data:{title:'Home'}
             }
             
-        ]
+        ],
+        canActivate:[AuthGuard]
     }, 
     {
         path:'admin',
         component: AdminComponent,
-        data: {title:'Admin'}
+        data: {title:'Admin'},
+        canActivate:[AuthGuard]
     },
     { 
         path: 'login', 
