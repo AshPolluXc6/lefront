@@ -1,1 +1,24 @@
-<p>admin works!</p>
+<div class="po-wrapper">
+    <po-menu
+        [p-menus]="menuItems"
+        [p-automatic-toggle]="true"
+        [p-collapsed]="true"
+        [p-search-tree-items]="true"
+      >
+    </po-menu>
+
+    <po-toolbar
+      class="toolbar"
+      [p-actions]="actions"
+      p-actions-icon="ph ph-plus"
+      [p-notification-actions]="notifications"
+      [p-notification-number]="3"
+      [p-profile]="profile"
+      [p-profile-actions]="profileActs"
+      p-mask=""
+      ></po-toolbar>
+
+    <div class="router-container">
+      <router-outlet></router-outlet>
+    </div>
+</div>

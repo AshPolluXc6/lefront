@@ -7,11 +7,10 @@ import { LoginComponent } from '../../../components/login/login.component';
 // import { HttpClientModule } from '@angular/common/http';
 
 @Component({
-  selector: 'app-login-page',
-  standalone: true,
-  imports: [LoginComponent],
-  templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss'
+    selector: 'app-login-page',
+    imports: [LoginComponent],
+    templateUrl: './login-page.component.html',
+    styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
 }

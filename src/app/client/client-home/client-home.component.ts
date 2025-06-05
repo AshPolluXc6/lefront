@@ -14,21 +14,21 @@ import { SearchItemComponent, SearchResult } from '../../components/search-item/
 
 
 @Component({
-  selector: 'app-client-home',
-  standalone: true,
-  imports: [
-    NewsCardComponent,
-    MovieShowcaseComponent,
-    SliderComponent,
-    NgClass,
-    ReviewCardComponent,
-    SearchBarComponent,
-    CommonModule,
-    RouterModule,
-    SearchItemComponent
-],
-  templateUrl: './client-home.component.html',
-  styleUrls: ['./client-home.component.scss'],
+    selector: 'app-client-home',
+    standalone: true,
+    imports: [
+        NewsCardComponent,
+        MovieShowcaseComponent,
+        SliderComponent,
+        NgClass,
+        ReviewCardComponent,
+        SearchBarComponent,
+        CommonModule,
+        RouterModule,
+        SearchItemComponent
+    ],
+    templateUrl: './client-home.component.html',
+    styleUrls: ['./client-home.component.scss']
 })
 export class ClientHomeComponent implements OnInit {
   

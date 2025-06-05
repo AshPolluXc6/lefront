@@ -7,11 +7,10 @@ export interface SlideImage {
 }
 
 @Component({
-  selector: 'app-slider',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './slider.component.html',
-  styleUrl: './slider.component.scss',
+    selector: 'app-slider',
+    imports: [CommonModule],
+    templateUrl: './slider.component.html',
+    styleUrl: './slider.component.scss'
 })
 export class SliderComponent implements OnInit, OnDestroy {
   @Input() images: SlideImage[] = [];

@@ -4,15 +4,14 @@ import { CommonModule } from '@angular/common';
 import { SearchItemComponent, SearchResult } from '../search-item/search-Item.component';
 
 @Component({
-  selector: 'app-search-bar',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    SearchItemComponent
-  ],
-  templateUrl: './search-bar.component.html',
-  styleUrl: './search-bar.component.scss'
+    selector: 'app-search-bar',
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        SearchItemComponent
+    ],
+    templateUrl: './search-bar.component.html',
+    styleUrl: './search-bar.component.scss'
 })
 export class SearchBarComponent implements OnInit {
   @Input() data: SearchResult[] = [];

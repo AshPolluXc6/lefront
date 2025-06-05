@@ -10,11 +10,10 @@ interface Movie {
 }
 
 @Component({
-  selector: 'app-movie-showcase',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './movie-showcase.component.html',
-  styleUrl: './movie-showcase.component.scss'
+    selector: 'app-movie-showcase',
+    imports: [CommonModule],
+    templateUrl: './movie-showcase.component.html',
+    styleUrl: './movie-showcase.component.scss'
 })
 export class MovieShowcaseComponent implements OnInit, OnDestroy {
 

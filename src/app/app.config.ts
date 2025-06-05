@@ -14,6 +14,8 @@ import { contentTypeInterceptor } from './core/Interceptors/content-type.interce
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 
+import { PoHttpRequestModule } from '@po-ui/ng-components';
+
 export function translateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -28,6 +30,7 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([contentTypeInterceptor, jwtInterceptor])
     ),
     importProvidersFrom(
+      [PoHttpRequestModule],
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,

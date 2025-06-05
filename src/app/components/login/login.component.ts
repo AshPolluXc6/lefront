@@ -9,18 +9,17 @@ import { AuthService } from '../../core/services/auth.service';
 // import { AuthService } from '../../core/services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    PasswordInputComponent,
-    ToggleSwitchComponent,
-    TranslateModule
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        PasswordInputComponent,
+        ToggleSwitchComponent,
+        TranslateModule
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit{
   loginForm: FormGroup;

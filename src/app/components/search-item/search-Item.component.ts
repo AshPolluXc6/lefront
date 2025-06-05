@@ -10,11 +10,10 @@ export interface SearchResult {
 }
 
 @Component({
-  selector: 'app-search-item',
-  standalone: true,
-  imports: [],
-  templateUrl: './search-item.component.html',
-  styleUrl: './search-item.component.scss'
+    selector: 'app-search-item',
+    imports: [],
+    templateUrl: './search-item.component.html',
+    styleUrl: './search-item.component.scss'
 })
 export class SearchItemComponent {
 @Input() result!: SearchResult;

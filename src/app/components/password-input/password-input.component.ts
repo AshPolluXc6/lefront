@@ -3,18 +3,17 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-password-input',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './password-input.component.html',
-  styleUrl: './password-input.component.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PasswordInputComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-password-input',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './password-input.component.html',
+    styleUrl: './password-input.component.scss',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PasswordInputComponent),
+            multi: true
+        }
+    ]
 })
 export class PasswordInputComponent implements ControlValueAccessor {
 @Input() placeholder = 'Enter password';

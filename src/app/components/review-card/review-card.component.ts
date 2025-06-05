@@ -12,11 +12,10 @@ interface reviewCard{
 }
 
 @Component({
-  selector: 'app-review-card',
-  standalone: true,
-  imports: [ DatePipe, StarRatingComponent, CommonModule],
-  templateUrl: './review-card.component.html',
-  styleUrl: './review-card.component.scss'
+    selector: 'app-review-card',
+    imports: [DatePipe, StarRatingComponent, CommonModule],
+    templateUrl: './review-card.component.html',
+    styleUrl: './review-card.component.scss'
 })
 export class ReviewCardComponent implements OnInit {
   @Input() data: reviewCard[] = [];

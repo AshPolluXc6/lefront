@@ -9,11 +9,11 @@ import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, AdminComponent, ClientHomeComponent, RateStarsComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    standalone: true,
+    imports: [RouterOutlet, AdminComponent, ClientHomeComponent, RateStarsComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
   constructor(private translate: TranslateService) {

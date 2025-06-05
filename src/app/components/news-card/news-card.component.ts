@@ -11,11 +11,10 @@ interface newsCard {
 }
 
 @Component({
-  selector: 'app-news-card',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './news-card.component.html',
-  styleUrl: './news-card.component.scss'
+    selector: 'app-news-card',
+    imports: [CommonModule],
+    templateUrl: './news-card.component.html',
+    styleUrl: './news-card.component.scss'
 })
 export class NewsCardComponent {
   @Input() data: newsCard[] = [];

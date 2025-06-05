@@ -3,18 +3,17 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-toggle-switch',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './toggle-switch.component.html',
-  styleUrl: './toggle-switch.component.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ToggleSwitchComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-toggle-switch',
+    imports: [CommonModule],
+    templateUrl: './toggle-switch.component.html',
+    styleUrl: './toggle-switch.component.scss',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ToggleSwitchComponent),
+            multi: true
+        }
+    ]
 })
 export class ToggleSwitchComponent implements ControlValueAccessor {
  @Input() label = '';

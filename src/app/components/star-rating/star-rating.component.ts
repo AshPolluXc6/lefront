@@ -2,11 +2,10 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgStyle, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-star-rating',
-  standalone: true,
-  imports: [NgStyle, NgFor],
-  templateUrl: './star-rating.component.html',
-  styleUrl: './star-rating.component.scss'
+    selector: 'app-star-rating',
+    imports: [NgStyle, NgFor],
+    templateUrl: './star-rating.component.html',
+    styleUrl: './star-rating.component.scss'
 })
 export class StarRatingComponent implements OnChanges {
   @Input() rating: number = 0;
