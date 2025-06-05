@@ -1,6 +1,6 @@
 import { ApplicationConfig, LOCALE_ID, importProvidersFrom  } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, HttpClient, withInterceptors  } from '@angular/common/http';
+import { provideHttpClient, HttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
 // translate module
