@@ -3,9 +3,11 @@ import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 
 import { registerLocaleData } from '@angular/common';
+import { provideQuillConfig } from 'ngx-quill';
 import localePt from '@angular/common/locales/pt';
+
 
 registerLocaleData(localePt);
 
-bootstrapApplication(AppComponent, appConfig)
+bootstrapApplication(AppComponent, appConfig,  )
   .catch((err) => console.error(err));

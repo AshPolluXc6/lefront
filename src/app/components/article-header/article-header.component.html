@@ -1,0 +1,23 @@
+  <header class="article-header fade-in">
+      <div class="header-content">
+        <div class="category-badge">
+          <span>{{ category }}</span>
+        </div>
+        <h1 class="article-title font-primary">{{ title }}</h1>
+        <p class="article-subtitle">{{ subtitle }}</p>
+        
+        <div class="article-meta">
+          <div class="author-info">
+            <img [src]="authorAvatar" [alt]="authorName" class="author-avatar">
+            <div class="author-details">
+              <span class="author-name">{{ authorName }}</span>
+              <span class="author-title">{{ authorTitle }}</span>
+            </div>
+          </div>
+          <div class="article-stats">
+            <span class="publish-date">{{ publishDate }}</span>
+            <span class="read-time">{{ readTime }} min de leitura</span>
+          </div>
+        </div>
+      </div>
+    </header>

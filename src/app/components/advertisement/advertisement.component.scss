@@ -1,0 +1,75 @@
+.advertisement {
+      background: linear-gradient(135deg, var(--color-surface), var(--color-border));
+      border: 2px dashed var(--color-primary);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-lg);
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .advertisement:hover {
+      border-color: var(--color-accent);
+      background: linear-gradient(135deg, var(--color-border), var(--color-surface));
+    }
+
+    .ad-label {
+      position: absolute;
+      top: -8px;
+      left: var(--spacing-md);
+      background: var(--color-background);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .ad-content {
+      padding: var(--spacing-md) 0;
+    }
+
+    .ad-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .ad-icon {
+      font-size: 3rem;
+      opacity: 0.7;
+    }
+
+    .ad-placeholder h4 {
+      margin: 0;
+      color: var(--color-text-secondary);
+      font-size: 1.125rem;
+    }
+
+    .ad-placeholder p {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 0.875rem;
+      max-width: 300px;
+    }
+
+    .advertisement.banner {
+      margin: var(--spacing-xl) 0;
+    }
+
+    .advertisement.sidebar {
+      position: sticky;
+      top: var(--spacing-lg);
+    }
+
+    .advertisement.footer {
+      margin-top: var(--spacing-xl);
+    }
+
+    @media (max-width: 768px) {
+      .advertisement.sidebar {
+        position: static;
+        margin: var(--spacing-lg) 0;
+      }
+    }

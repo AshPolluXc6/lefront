@@ -38,30 +38,51 @@ export class AdminComponent implements OnInit {
   // -------------^ Vars ^-----------------
 menuItems: Array<poTypesUI['menuItem']> = [
   
-    { label: 'Home',
-      icon: 'an-fill an-house',
-      link: '/home', 
+    { label: 'Inicio',
+      icon: 'an-fill an-squares-four',
+      link: '', 
       shortLabel:'teste' },
       
-    { label: 'Prevenda', 
-      icon: 'an-fill an-shopping-cart-simple', 
-      link: '/home/prevenda', 
+    { label: 'Publicações', 
+      icon: 'an-fill an-book-bookmark', 
+      link: '', 
       shortLabel:'prevenda' },
 
-    { label: 'Ação personalizada', 
-      icon: 'po-icon-star', 
+    { label: 'Cadastros', 
+      icon: 'an-fill an-clipboard-text', 
       link: '/contact', 
-      shortLabel:'teste' },
-
-    { link: 'teste', 
-      label: 'PO ICON', 
-      icon: 'an-fill an-hand-fist', 
-      shortLabel:'teste' }
+      shortLabel:'Cadastros',
+      subItems: [
+      {
+        label: 'Cargos',
+        icon: 'an-fill an-users',
+        link: '',
+        shortLabel: 'Cargos'
+      },
+      {
+        label:'Categorias',
+        icon: 'an-fill an-text-indent',
+        link: '',
+        shortLabel:'Categorias',
+      },
+      {
+        label: 'Usuarios',
+        icon: 'an-fill an-users',
+        link: '',
+        shortLabel: 'Usuários'
+      } ]
+    },
+    { 
+      label: 'Permissões', 
+      icon: 'an-fill an-user-check', 
+      link: '', 
+      shortLabel:'Permissões' 
+    }
   ]; 
   
-  readonly actions: Array<poTypesUI['toolbarAction']> = [
-      { label: 'New task', action: () => this.onNewtask(), icon: 'po-icon-plus' }
-    ];
+  // readonly actions: Array<poTypesUI['toolbarAction']> = [
+  //     { label: 'New task', action: () => this.onNewtask(), icon: 'po-icon-plus' }
+  //   ];
   
   readonly notifications: Array<poTypesUI['toolbarAction']> = [
       { label: 'Nova notificação', action: () => this.onNewtask(), icon: 'po-icon-mail' }
@@ -86,6 +107,8 @@ menuItems: Array<poTypesUI['menuItem']> = [
 
 
 
-
-  
+//  Garbage ------------
+ isAdmimRoute(): boolean {
+    return this.rout.url.includes('/admim');
+  }
 }

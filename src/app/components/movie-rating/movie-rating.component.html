@@ -1,0 +1,29 @@
+  <div class="movie-rating card">
+      <div class="rating-header">
+        <h3 class="font-primary">Avaliação do Filme</h3>
+        <div class="overall-score">
+          <span class="score-number">{{ overallScore }}</span>
+          <span class="score-max">/10</span>
+        </div>
+      </div>
+      
+      <div class="rating-breakdown">
+        <div class="rating-item" *ngFor="let criterion of ratingCriteria">
+          <div class="criterion-info">
+            <span class="criterion-name">{{ criterion.name }}</span>
+            <span class="criterion-score">{{ criterion.score }}/10</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="criterion.score * 10"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="rating-stars">
+        <span *ngFor="let star of getStars(); let i = index" 
+              class="star" 
+              [class.filled]="i < filledStarCount">
+          ★
+        </span>
+      </div>
+    </div>

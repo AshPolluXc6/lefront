@@ -1,0 +1,11 @@
+ <div class="advertisement" [class]="adClass">
+      <div class="ad-label">{{ label }}</div>
+      <div class="ad-content">
+        <div class="ad-placeholder">
+          <div class="ad-icon">📽️</div>
+          <h4>{{ title }}</h4>
+          <p>{{ description }}</p>
+          <button class="btn btn-primary" *ngIf="showButton">{{ buttonText }}</button>
+        </div>
+      </div>
+    </div>

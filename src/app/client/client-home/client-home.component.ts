@@ -10,7 +10,7 @@ import { SearchBarComponent } from '../../components/search-bar/search-bar.compo
 import { ApiService } from '../../core/services/api.service';
 import { Queries } from '../../core/querys/queries';
 import { Router } from '@angular/router';
-import { SearchItemComponent, SearchResult } from '../../components/search-item/search-Item.component';
+import { SearchResult } from '../../components/search-item/search-Item.component';
 
 
 @Component({
@@ -25,7 +25,7 @@ import { SearchItemComponent, SearchResult } from '../../components/search-item/
         SearchBarComponent,
         CommonModule,
         RouterModule,
-        SearchItemComponent
+        
     ],
     templateUrl: './client-home.component.html',
     styleUrls: ['./client-home.component.scss']

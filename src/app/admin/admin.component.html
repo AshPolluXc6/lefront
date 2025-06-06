@@ -1,5 +1,6 @@
-<div class="po-wrapper">
+<div class="po-wrapper" [ngClass]="{'bg-gray': isAdmimRoute()}">
     <po-menu
+        p-logo = "assets\sass\svg\leparler-logo_w.svg"
         [p-menus]="menuItems"
         [p-automatic-toggle]="true"
         [p-collapsed]="true"
@@ -9,8 +10,6 @@
 
     <po-toolbar
       class="toolbar"
-      [p-actions]="actions"
-      p-actions-icon="ph ph-plus"
       [p-notification-actions]="notifications"
       [p-notification-number]="3"
       [p-profile]="profile"

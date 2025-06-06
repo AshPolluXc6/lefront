@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, AdminComponent, ClientHomeComponent, RateStarsComponent],
+    imports: [RouterOutlet],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
