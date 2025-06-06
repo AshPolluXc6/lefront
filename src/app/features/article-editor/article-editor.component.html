@@ -1,0 +1,275 @@
+  <div class="article-editor">
+      <div class="editor-header">
+        <h1 class="font-primary">{{ isEditMode ? 'Editar Artigo' : 'Criar Novo Artigo' }}</h1>
+        <div class="header-actions">
+          <button type="button" class="btn btn-secondary" (click)="cancel()">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-outline" (click)="saveDraft()" [disabled]="!articleForm.valid">
+            Salvar Rascunho
+          </button>
+          <button type="button" class="btn btn-primary" (click)="publishArticle()" [disabled]="!articleForm.valid">
+            {{ isEditMode ? 'Atualizar' : 'Publicar' }}
+          </button>
+        </div>
+      </div>
+
+      <form [formGroup]="articleForm" class="editor-form">
+        <div class="form-grid">
+          <!-- Left Column - Main Content -->
+          <div class="main-content">
+            
+            <!-- Basic Information -->
+            <div class="form-section">
+              <h3>Informações Básicas</h3>
+              
+              <div class="form-group">
+                <label for="title">Título do Artigo *</label>
+                <input 
+                  type="text" 
+                  id="title"
+                  formControlName="title"
+                  class="form-input"
+                  placeholder="Digite o título do artigo">
+                <div class="error-message" *ngIf="articleForm.get('title')?.invalid && articleForm.get('title')?.touched">
+                  Título é obrigatório
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="subtitle">Subtítulo</label>
+                <textarea 
+                  id="subtitle"
+                  formControlName="subtitle"
+                  class="form-textarea"
+                  rows="2"
+                  placeholder="Breve descrição do artigo"></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="category">Categoria *</label>
+                  <select id="category" formControlName="category" class="form-select">
+                    <option value="">Selecione uma categoria</option>
+                    <option value="Crítica de Cinema">Crítica de Cinema</option>
+                    <option value="Notícias">Notícias</option>
+                    <option value="Reviews">Reviews</option>
+                    <option value="Festivais">Festivais</option>
+                    <option value="Entrevistas">Entrevistas</option>
+                    <option value="Análises">Análises</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="readTime">Tempo de Leitura (min)</label>
+                  <input 
+                    type="number" 
+                    id="readTime"
+                    formControlName="readTime"
+                    class="form-input"
+                    min="1"
+                    max="60">
+                </div>
+              </div>
+            </div>
+
+            <!-- Featured Image -->
+            <div class="form-section">
+              <h3>Imagem Destacada</h3>
+              <div class="form-group">
+                <label for="featuredImage">URL da Imagem</label>
+                <input 
+                  type="url" 
+                  id="featuredImage"
+                  formControlName="featuredImage"
+                  class="form-input"
+                  placeholder="https://exemplo.com/imagem.jpg">
+                <div class="image-preview" *ngIf="articleForm.get('featuredImage')?.value">
+                  <img [src]="articleForm.get('featuredImage')?.value" alt="Preview" class="preview-img">
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Editor -->
+            <div class="form-section">
+              <h3>Conteúdo do Artigo</h3>
+              <div class="form-group">
+                <label><i>Editor de Texto</i></label>
+                <quill-editor 
+                    id="editor-unique-id"
+                  formControlName="content"
+                  
+                  placeholder="Escreva o conteúdo do seu artigo aqui...">
+                </quill-editor>
+              </div>
+            </div>
+
+            <!-- Movie Rating (Optional) -->
+            <div class="form-section" *ngIf="showMovieRating">
+              <h3>Avaliação do Filme</h3>
+              
+              <div class="form-group">
+                <label for="overallScore">Nota Geral (0-10)</label>
+                <input 
+                  type="number" 
+                  id="overallScore"
+                  formControlName="overallScore"
+                  class="form-input"
+                  min="0"
+                  max="10"
+                  step="0.1">
+              </div>
+
+              <div class="rating-criteria">
+                <h4>Critérios de Avaliação</h4>
+                <div formArrayName="ratingCriteria">
+                  <div *ngFor="let criterion of ratingCriteriaArray.controls; let i = index" 
+                       [formGroupName]="i" 
+                       class="criterion-row">
+                    <div class="form-group">
+                      <input 
+                        type="text" 
+                        formControlName="name"
+                        class="form-input"
+                        placeholder="Nome do critério">
+                    </div>
+                    <div class="form-group">
+                      <input 
+                        type="number" 
+                        formControlName="score"
+                        class="form-input"
+                        min="0"
+                        max="10"
+                        step="0.1"
+                        placeholder="Nota">
+                    </div>
+                    <button type="button" class="btn btn-danger-outline" (click)="removeCriterion(i)">
+                      Remover
+                    </button>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-outline" (click)="addCriterion()">
+                  Adicionar Critério
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column - Sidebar -->
+          <div class="sidebar-content">
+            
+            <!-- Author Information -->
+            <div class="form-section">
+              <h3>Informações do Autor</h3>
+              
+              <div class="form-group">
+                <label for="authorName">Nome do Autor *</label>
+                <input 
+                  type="text" 
+                  id="authorName"
+                  formControlName="authorName"
+                  class="form-input"
+                  placeholder="Nome completo">
+              </div>
+
+              <div class="form-group">
+                <label for="authorTitle">Cargo/Título</label>
+                <input 
+                  type="text" 
+                  id="authorTitle"
+                  formControlName="authorTitle"
+                  class="form-input"
+                  placeholder="Ex: Crítico de Cinema">
+              </div>
+
+              <div class="form-group">
+                <label for="authorAvatar">Avatar do Autor</label>
+                <input 
+                  type="url" 
+                  id="authorAvatar"
+                  formControlName="authorAvatar"
+                  class="form-input"
+                  placeholder="URL da foto do autor">
+                <div class="avatar-preview" *ngIf="articleForm.get('authorAvatar')?.value">
+                  <img [src]="articleForm.get('authorAvatar')?.value" alt="Avatar" class="preview-avatar">
+                </div>
+              </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="form-section">
+              <h3>Tags</h3>
+              <div class="form-group">
+                <label for="tagsInput">Adicionar Tags</label>
+                <div class="tags-input-container">
+                  <input 
+                    type="text" 
+                    id="tagsInput"
+                    [(ngModel)]="newTag"
+                    [ngModelOptions]="{standalone: true}"
+                    class="form-input"
+                    placeholder="Digite uma tag e pressione Enter"
+                    (keyup.enter)="addTag()">
+                  <button type="button" class="btn btn-outline" (click)="addTag()">Adicionar</button>
+                </div>
+                
+                <div class="tags-list" *ngIf="tags.length > 0">
+                  <span *ngFor="let tag of tags; let i = index" class="tag-item">
+                    {{ tag }}
+                    <button type="button" class="tag-remove" (click)="removeTag(i)">×</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Publishing Options -->
+            <div class="form-section">
+              <h3>Opções de Publicação</h3>
+              
+              <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" formControlName="status" class="form-select">
+                  <option value="draft">Rascunho</option>
+                  <option value="published">Publicado</option>
+                  <option value="scheduled">Agendado</option>
+                </select>
+              </div>
+
+              <div class="form-group" *ngIf="articleForm.get('status')?.value === 'scheduled'">
+                <label for="scheduledDate">Data de Publicação</label>
+                <input 
+                  type="datetime-local" 
+                  id="scheduledDate"
+                  formControlName="scheduledDate"
+                  class="form-input">
+              </div>
+
+              <div class="form-group">
+                <label for="publishDate">Data de Publicação Exibida</label>
+                <input 
+                  type="text" 
+                  id="publishDate"
+                  formControlName="publishDate"
+                  class="form-input"
+                  placeholder="Ex: 15 de Janeiro, 2025">
+              </div>
+            </div>
+
+            <!-- Movie Rating Toggle -->
+            <div class="form-section">
+              <h3>Configurações Especiais</h3>
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    [(ngModel)]="showMovieRating"
+                    [ngModelOptions]="{standalone: true}"
+                    class="form-checkbox">
+                  Incluir avaliação de filme
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>

@@ -1,0 +1,224 @@
+ <div class="cinema-article-page">
+      <!-- Header Navigation -->
+      <nav class="main-nav">
+        <div class="container">
+          <div class="nav-content">
+            <div class="logo">
+              <h2 class="font-primary text-primary">CineVibe</h2>
+            </div>
+            <div class="nav-links">
+              <a href="#" class="nav-link">Críticas</a>
+              <a href="#" class="nav-link">Notícias</a>
+              <a href="#" class="nav-link">Reviews</a>
+              <a href="#" class="nav-link">Festivais</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Article Header -->
+      <app-article-header></app-article-header>
+
+      <!-- Top Advertisement Banner -->
+      <div class="container">
+        <app-advertisement 
+          adClass="banner"
+          title="Explore o Cinema Mundial"
+          description="Descubra os filmes mais aclamados de todos os tempos em nossa plataforma premium."
+          buttonText="Comece Agora">
+        </app-advertisement>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="container">
+          <div class="content-grid">
+            
+            <!-- Article Content -->
+            <article class="article-content">
+              
+              <!-- Movie Poster Section -->
+              <div class="movie-showcase card">
+                <img src="https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=2" 
+                     alt="Cena do filme" 
+                     class="movie-poster">
+                <div class="movie-info">
+                  <h3 class="font-primary">O Filme em Destaque</h3>
+                  <p class="movie-details">Direção: Christopher Nolan | Ano: 2023 | Duração: 148 min</p>
+                </div>
+              </div>
+
+              <!-- Article Text Content -->
+              <div class="article-text">
+                <p class="lead-paragraph">
+                  O cinema contemporâneo está passando por uma transformação sem precedentes. Diretores emergentes estão desafiando as convenções narrativas tradicionais, criando experiências cinematográficas que transcendem as fronteiras entre realidade e ficção.
+                </p>
+
+                <p>
+                  Esta revolução não é apenas técnica, mas também conceitual. Estamos testemunhando uma geração de cineastas que cresceu imersa na cultura digital, trazendo uma nova linguagem visual que dialoga diretamente com o público contemporâneo. A narrativa não-linear, o uso inovador da tecnologia e a integração de elementos interativos estão redefinindo o que significa "assistir a um filme".
+                </p>
+
+                <h2 class="section-title font-primary">A Nova Linguagem Cinematográfica</h2>
+
+                <p>
+                  Os filmes de hoje não seguem mais a estrutura clássica de três atos de forma rígida. Diretores como Denis Villeneuve, Ari Aster e Jordan Peele estão experimentando com cronologias fragmentadas, múltiplas perspectivas e finais abertos que convidam o espectador a participar ativamente da construção do significado.
+                </p>
+
+                <blockquote class="article-quote">
+                  "O cinema não é apenas entretenimento; é uma forma de explorar a condição humana através de linguagens visuais e sonoras que transcendem as barreiras culturais."
+                  <cite>— Martin Scorsese</cite>
+                </blockquote>
+
+                <p>
+                  A tecnologia também desempenha um papel fundamental nesta transformação. Desde a popularização das câmeras digitais de alta qualidade até os avanços em CGI e realidade virtual, os cineastas têm acesso a ferramentas que permitem materializar visões antes consideradas impossíveis.
+                </p>
+
+                <h2 class="section-title font-primary">O Impacto das Plataformas de Streaming</h2>
+
+                <p>
+                  As plataformas de streaming revolucionaram não apenas como consumimos cinema, mas também como ele é produzido. Netflix, Amazon Prime, Apple TV+ e outras plataformas estão investindo bilhões em conteúdo original, dando oportunidades para cineastas experimentarem com formatos e narrativas que talvez não encontrassem espaço no cinema tradicional.
+                </p>
+
+                <p>
+                  Esta democratização da distribuição permite que histórias mais diversas e experimentais alcancem audiências globais. Filmes de países anteriormente sub-representados no cenário internacional, como "Parasita" da Coreia do Sul ou "Roma" do México, conquistaram não apenas críticos, mas também o público mainstream.
+                </p>
+              </div>
+
+              <!-- Movie Rating Section -->
+              <app-movie-rating></app-movie-rating>
+
+              <!-- Additional Content -->
+              <div class="article-text">
+                <h2 class="section-title font-primary">O Futuro do Cinema</h2>
+
+                <p>
+                  Olhando para o futuro, podemos esperar ainda mais inovação. A realidade virtual e aumentada promete criar experiências cinematográficas completamente imersivas. A inteligência artificial está sendo utilizada tanto na produção (edição automatizada, efeitos visuais) quanto na distribuição (recomendações personalizadas, análise de audiência).
+                </p>
+
+                <p>
+                  No entanto, em meio a toda essa inovação tecnológica, o elemento humano permanece central. As melhores experiências cinematográficas continuam sendo aquelas que nos conectam emocionalmente, que nos fazem refletir sobre nossa própria humanidade e que nos inspiram a ver o mundo de forma diferente.
+                </p>
+
+                <p>
+                  O cinema do futuro será, provavelmente, uma síntese entre tradição e inovação, mantendo a essência narrativa que torna esta arte tão poderosa, enquanto abraça as possibilidades tecnológicas que expandem seus horizontes criativos.
+                </p>
+              </div>
+
+              <!-- Article Footer -->
+              <footer class="article-footer">
+                <div class="article-tags">
+                  <span class="tag">Cinema Moderno</span>
+                  <span class="tag">Narrativa</span>
+                  <span class="tag">Streaming</span>
+                  <span class="tag">Tecnologia</span>
+                  <span class="tag">Futuro</span>
+                </div>
+                
+                <div class="article-actions">
+                  <button class="btn btn-primary">Compartilhar</button>
+                  <button class="btn btn-secondary">Salvar</button>
+                </div>
+              </footer>
+            </article>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+              
+              <!-- Sidebar Ad -->
+              <app-advertisement 
+                adClass="sidebar"
+                title="Cursos de Cinema"
+                description="Aprenda com os melhores profissionais da indústria cinematográfica."
+                buttonText="Inscreva-se">
+              </app-advertisement>
+
+              <!-- Related Articles -->
+              <div class="related-articles card">
+                <h3 class="font-primary">Artigos Relacionados</h3>
+                <div class="related-list">
+                  <article class="related-item">
+                    <img src="https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=2" alt="Artigo relacionado">
+                    <div class="related-content">
+                      <h4>A Evolução dos Efeitos Especiais</h4>
+                      <p class="related-date">12 Jan 2025</p>
+                    </div>
+                  </article>
+                  
+                  <article class="related-item">
+                    <img src="https://images.pexels.com/photos/7991734/pexels-photo-7991734.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=2" alt="Artigo relacionado">
+                    <div class="related-content">
+                      <h4>Festival de Cannes 2025: Destaques</h4>
+                      <p class="related-date">10 Jan 2025</p>
+                    </div>
+                  </article>
+                  
+                  <article class="related-item">
+                    <img src="https://images.pexels.com/photos/7991667/pexels-photo-7991667.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=2" alt="Artigo relacionado">
+                    <div class="related-content">
+                      <h4>O Renascimento do Cinema Asiático</h4>
+                      <p class="related-date">8 Jan 2025</p>
+                    </div>
+                  </article>
+                </div>
+              </div>
+
+              <!-- Newsletter Signup -->
+              <div class="newsletter-signup card">
+                <h3 class="font-primary">Newsletter</h3>
+                <p>Receba as últimas críticas e notícias do mundo cinematográfico.</p>
+                <form class="newsletter-form">
+                  <input type="email" placeholder="Seu e-mail" class="email-input">
+                  <button type="submit" class="btn btn-primary">Inscrever</button>
+                </form>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer Advertisement -->
+      <div class="container">
+        <app-advertisement 
+          adClass="footer"
+          title="Equipamentos Cinematográficos"
+          description="Encontre as melhores câmeras, lentes e equipamentos para sua produção."
+          buttonText="Ver Produtos">
+        </app-advertisement>
+      </div>
+
+      <!-- Footer -->
+      <footer class="main-footer">
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-section">
+              <h3 class="font-primary text-primary">CineVibe</h3>
+              <p>Sua fonte confiável para críticas e análises cinematográficas.</p>
+            </div>
+            
+            <div class="footer-section">
+              <h4>Seções</h4>
+              <ul class="footer-links">
+                <li><a href="#">Críticas</a></li>
+                <li><a href="#">Notícias</a></li>
+                <li><a href="#">Reviews</a></li>
+                <li><a href="#">Festivais</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-section">
+              <h4>Contato</h4>
+              <ul class="footer-links">
+                <li><a href="#">Sobre Nós</a></li>
+                <li><a href="#">Contato</a></li>
+                <li><a href="#">Anuncie</a></li>
+                <li><a href="#">Política de Privacidade</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="footer-bottom">
+            <p>&copy; 2025 CineVibe. Todos os direitos reservados.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
