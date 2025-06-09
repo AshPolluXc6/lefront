@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../environment/env';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -47,8 +47,14 @@ export class ApiService {
 
 
   query<T>(sql: string): Observable<T> {
-    return this.post<T>(environment.api.endpoints.sql, { q: sql });
-  }
+    alert('chamou');
+  return this.post<T>(environment.api.endpoints.sql, { q: sql }).pipe(
+    catchError(error => {
+      console.error('Erro na query:', error);
+      throw error;
+    })
+  );
+}
     
 
 

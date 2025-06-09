@@ -45,6 +45,7 @@ menuItems: Array<poTypesUI['menuItem']> = [
       
     { label: 'Publicações', 
       icon: 'an-fill an-book-bookmark', 
+      action: () => this.goToArticles(),
       link: '', 
       shortLabel:'prevenda' },
 
@@ -105,6 +106,9 @@ menuItems: Array<poTypesUI['menuItem']> = [
       alert('Nova tarefa');
   }
 
+  goToArticles(){
+    this.rout.navigate(['/admin/articles']);
+  }
 
 
 //  Garbage ------------

@@ -10,6 +10,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 // interceptors
 import { jwtInterceptor } from './core/Interceptors/jwt.interceptor';
 import { contentTypeInterceptor } from './core/Interceptors/content-type.interceptor';
+import { poTableInterceptor } from './core/Interceptors/poTablesInterceptor.interceptor';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
@@ -27,7 +28,7 @@ export const appConfig: ApplicationConfig = {
       provideAnimations(),
     provideClientHydration(),
     provideHttpClient(
-      withInterceptors([contentTypeInterceptor, jwtInterceptor])
+      withInterceptors([contentTypeInterceptor, jwtInterceptor, poTableInterceptor])
     ),
     importProvidersFrom(
       [PoHttpRequestModule],

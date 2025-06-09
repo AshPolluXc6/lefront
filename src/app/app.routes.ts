@@ -28,17 +28,24 @@ export const routes: Routes = [
         path:'admin',
         component: AdminComponent,
         data: {title:'Admin'},
+         children: [
+        {
+            path: 'articles',
+            component: ArticleComponent,
+            
+        },
+        {
+                path: 'editor/:id',
+                component: ArticleEditorComponent,
+                data: { title: 'Editor' }
+                }
+    ]
         // canActivate:[AuthGuard]
     },
     { 
         path: 'login', 
         component: LoginPageComponent,
         data:  {title:'Login'}
-    },
-    { 
-        path: 'article', 
-        component: ArticleComponent,
-        data:  {title:'Article'}
     },
     { 
         path: 'editor', 
