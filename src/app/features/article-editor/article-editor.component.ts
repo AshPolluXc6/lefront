@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { ArticleData } from '../../core/models/articleData.model';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { AbasService } from '../../core/services/sessionStorage.service';
 
 
 @Component({
@@ -47,14 +48,71 @@ export class ArticleEditorComponent {
     height: '400px'
   };
 
-  constructor(private fb: FormBuilder) {}
+   constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private abasService: AbasService
+  ) {}
 
-  ngOnInit() {
-    this.initializeForm();
-    if (this.articleData) {
-      this.loadArticleData();
+ngOnInit() {
+  this.initializeForm();
+  
+  const id = this.route.snapshot.paramMap.get('id');
+  this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
+  
+  // Obter dados da aba atual
+  const aba = this.abasService.getAbaPorLink(this.router.url);
+  
+  if (aba?.dados) {
+    this.loadArticleData(aba.dados);
+  } else if (this.isEditMode && id) {
+    this.carregarArtigo(Number(id));
+  } else {
+    this.inicializarNovoArtigo();
+  }
+  }
+   inicializarNovoArtigo(): void {
+    // Inicializa o formulário com valores padrão para um novo artigo
+    this.articleForm.patchValue({
+      title: '',
+      subtitle: '',
+      category: '',
+      content: '',
+      authorName: '',
+      authorTitle: '',
+      authorAvatar: '',
+      publishDate: this.getCurrentDate(),
+      readTime: 5,
+      featuredImage: '',
+      overallScore: 0,
+      status: 'draft',
+      scheduledDate: ''
+    });
+    
+    // Limpa dados adicionais
+    this.tags = [];
+    this.showMovieRating = false;
+    
+    // Limpa critérios de avaliação
+    while (this.ratingCriteriaArray.length > 0) {
+      this.ratingCriteriaArray.removeAt(0);
     }
   }
+  ngAfterViewInit() {
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
+    this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
+    
+    const aba = this.abasService.getAbaPorLink(this.router.url);
+    
+    if (aba?.dados) {
+      this.loadArticleData(aba.dados);
+    } else if (this.isEditMode && id) {
+      this.carregarArtigo(Number(id));
+    }
+  });
+}
 
   initializeForm() {
     this.articleForm = this.fb.group({
@@ -79,18 +137,32 @@ export class ArticleEditorComponent {
     return this.articleForm.get('ratingCriteria') as any;
   }
 
-  loadArticleData() {
-    if (this.articleData) {
-      this.articleForm.patchValue(this.articleData);
-      this.tags = this.articleData.tags || [];
-      this.showMovieRating = !!this.articleData.movieRating;
-      
-      if (this.articleData.movieRating?.criteria) {
-        this.articleData.movieRating.criteria.forEach(criterion => {
-          this.addCriterion(criterion);
-        });
+  loadArticleData(articleData: ArticleData) {
+    this.articleForm.patchValue(articleData);
+    this.tags = articleData.tags || [];
+    this.showMovieRating = !!articleData.movieRating;
+    
+    if (articleData.movieRating?.criteria) {
+      // Limpa critérios existentes
+      while (this.ratingCriteriaArray.length) {
+        this.ratingCriteriaArray.removeAt(0);
       }
+      
+      // Adiciona novos critérios
+      articleData.movieRating.criteria.forEach(criterion => {
+        this.addCriterion(criterion);
+      });
     }
+  }
+
+  carregarArtigo(id: number) {
+    // Implemente sua lógica para buscar do servidor
+    // Exemplo:
+    /*
+    this.api.getArtigo(id).subscribe(artigo => {
+      this.loadArticleData(artigo);
+    });
+    */
   }
 
   getCurrentDate(): string {

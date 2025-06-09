@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { ADMIN_COMPONENTS_IMPORTS } from './admin.imports.componen';
 import { poTypesUI } from '../po.imports';
+import { NavtabsComponent } from '../components/navtabs/navtabs.component';
 
 
 
@@ -14,6 +15,7 @@ import { poTypesUI } from '../po.imports';
       RouterOutlet,
       CommonModule,
       ...ADMIN_COMPONENTS_IMPORTS,
+      NavtabsComponent
     ],
     templateUrl: './admin.component.html',
     styleUrls: ['./admin.component.scss']

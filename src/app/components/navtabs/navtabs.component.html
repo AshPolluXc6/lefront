@@ -1,0 +1,27 @@
+<div class="tabs-container">
+  @for (aba of abasFiltradas; track $index) {
+    <a (click)="navegarParaAba(aba, $event)">
+      <div
+        class="tab"
+        [class.active]="rotaEstaAtiva(aba.link)"
+      >
+        <po-icon *ngIf="aba.icon" [p-icon]="aba.icon"></po-icon>
+        <p>{{ aba.label }}</p>
+
+        @if (!aba.fixo) {
+          <button (click)="fecharAba(aba.id, $event)">✖</button>
+        }
+      </div>
+    </a>
+  }
+
+  @if (abasFiltradas.length < maximoAbas) {
+    <button class="new-tab-btn" (click)="abrirAbaAtual()">{{ novaAbaLabel }}</button>
+  } @else {
+    <button class="new-tab-btn" disabled>{{ novaAbaLabel }}</button>
+  }
+</div>
+
+<div class="tab-count" (click)="abrirModalAbas()">
+  {{ abasFiltradas.length }}
+</div>

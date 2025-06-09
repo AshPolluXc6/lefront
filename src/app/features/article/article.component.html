@@ -1,7 +1,12 @@
+<po-button
+    slot="po-page-dynamic-table-top-actions"
+    p-label="Novo Artigo"
+    (p-click)="novoArtigo()"
+    ></po-button>
 <po-page-dynamic-table
   [p-service-api]="serviceApi"
   [p-title]="metadata.title"
   [p-fields]="metadata.fields"
   [p-keep-filters]="metadata.keepFilters"
   [p-table-custom-actions]="tableCustomActions">
-    </po-page-dynamic-table>
+</po-page-dynamic-table>

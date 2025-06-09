@@ -4,6 +4,7 @@ import { LoginPageComponent } from './core/auth/login-page/login-page.component'
 import { ArticleComponent } from './features/article/article.component';
 import { AuthGuard } from './core/guards/guard.service';
 import { ArticleEditorComponent } from './features/article-editor/article-editor.component';
+import { BlankComponent } from './components/blank/blank';
 
 export const routes: Routes = [
 
@@ -25,22 +26,18 @@ export const routes: Routes = [
         canActivate:[AuthGuard]
     }, 
     {
-        path:'admin',
+        path: 'admin',
         component: AdminComponent,
-        data: {title:'Admin'},
-         children: [
-        {
-            path: 'articles',
-            component: ArticleComponent,
-            
-        },
-        {
-                path: 'editor/:id',
-                component: ArticleEditorComponent,
-                data: { title: 'Editor' }
-                }
-    ]
-        // canActivate:[AuthGuard]
+        children: [
+            {
+                path: 'articles',
+                component: ArticleComponent
+            },
+            {
+            path: 'editor/:id',
+            component: ArticleEditorComponent
+            }
+        ]
     },
     { 
         path: 'login', 
@@ -51,6 +48,9 @@ export const routes: Routes = [
         path: 'editor', 
         component: ArticleEditorComponent,
         data:  {title:'Editor'}
-    },
-
+    }, 
+    {
+    path: 'blank',
+    component: BlankComponent 
+    }
 ];

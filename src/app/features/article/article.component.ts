@@ -3,12 +3,14 @@ import { ApiService } from '../../core/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Queries } from '../../core/querys/queries';
 import { PoPageDynamicTableModule } from '@po-ui/ng-templates';
+import { PoModule } from '@po-ui/ng-components';
 import { PoPageDynamicTableOptions } from '@po-ui/ng-templates';
 import { lastValueFrom } from 'rxjs';
+import { AbasService } from '../../core/services/sessionStorage.service';
 
 @Component({
   selector: 'app-article',
-  imports: [PoPageDynamicTableModule],
+  imports: [PoPageDynamicTableModule,PoModule],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'
 })
@@ -41,16 +43,53 @@ export class ArticleComponent implements OnInit{
 
   constructor(private api: ApiService,
     private rout: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private abasService: AbasService
   ) {}
 
   ngOnInit(): void {
-    // this.loadData;
-  }
+  this.abasService.abrirAbaPrincipal(
+    '/admin/articles',
+    'Artigos',
+    'an-fill an-list'
+  );
+}
 
+   abrirArtigo(row: any): void {
+  this.abasService.abrirAba({
+    basePath: '/admin/editor',
+    id: row.id,
+    label: `Editando ${row.nome}`,
+    dados: row
+  });
+}
+
+
+  
+  novoArtigo(): void {
+  const novoId = 'novo-' + Date.now();
+  
+  this.abasService.abrirAba({
+    basePath: '/admin/editor',
+    id: novoId,
+    label: 'Novo Artigo',
+    dados: {
+      title: '',
+      content: '',
+      status: 'draft'
+    }
+  });
+}
 
   abrirUsuario(row: any): void {
-  const id = row.id;
-  this.rout.navigate([`/admin/articles/editor`, id]);
-}
+    const id = row.id;
+    
+    // Passa os dados diretamente para a aba
+    this.abasService.abrirAba({
+      basePath: '/admin/editor',
+      id: id,
+      label: `Editando ${row.nome}`,
+      dados: row // Passa os dados do artigo para o editor
+    });
+  }
 }
