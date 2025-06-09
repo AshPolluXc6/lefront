@@ -5,6 +5,7 @@ import { ArticleComponent } from './features/article/article.component';
 import { AuthGuard } from './core/guards/guard.service';
 import { ArticleEditorComponent } from './features/article-editor/article-editor.component';
 import { BlankComponent } from './components/blank/blank';
+import { ArticleReadComponent } from './features/article-read/article-read.component';
 
 export const routes: Routes = [
 
@@ -48,6 +49,11 @@ export const routes: Routes = [
         path: 'editor', 
         component: ArticleEditorComponent,
         data:  {title:'Editor'}
+    }, 
+    { 
+        path: 'read', 
+        component: ArticleReadComponent,
+        data:  {title:'read'}
     }, 
     {
     path: 'blank',

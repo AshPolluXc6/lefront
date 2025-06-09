@@ -117,4 +117,12 @@ menuItems: Array<poTypesUI['menuItem']> = [
  isAdmimRoute(): boolean {
     return this.rout.url.includes('/admim');
   }
+  get showNavtabs(): boolean {
+  const url = this.rout.url;
+
+  return (
+    url.startsWith('/admin/articles') ||
+    url.startsWith('/admin/editor')
+  );
+}
 }
