@@ -63,6 +63,24 @@ export class AbasService {
   this.router.navigateByUrl(basePath);
 }
 
+salvarRascunhoAtual<T = any>(dadosParciais: Partial<T>): void {
+  const urlAtual = this.router.url;
+  const abas = [...this.abasAbertasSubject.getValue()];
+  const index = abas.findIndex(aba => aba.link === urlAtual);
+
+  if (index !== -1) {
+    abas[index] = {
+      ...abas[index],
+      dados: {
+        ...abas[index].dados,
+        ...dadosParciais,
+        status: 'draft'
+      }
+    };
+    this.atualizarAbas(abas);
+  }
+}
+
 
  abrirAba<T = any>(config: {
   basePath: string;

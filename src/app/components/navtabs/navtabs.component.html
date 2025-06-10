@@ -6,6 +6,7 @@
         [class.active]="rotaEstaAtiva(aba.link)"
       >
         <po-icon *ngIf="aba.icon" [p-icon]="aba.icon"></po-icon>
+        
         <p>{{ aba.label }}</p>
 
         @if (!aba.fixo) {

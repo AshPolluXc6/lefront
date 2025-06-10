@@ -1,7 +1,6 @@
 import { Component, inject, HostListener, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgClass } from '@angular/common';
-import { ConnectionService } from '../../services/connection.service';
 import { NewsCardComponent } from '../../components/news-card/news-card.component';
 import { MovieShowcaseComponent } from '../../components/movie-showcase/movie-showcase.component';
 import { SliderComponent } from '../../components/slider/slider.component';
@@ -46,7 +45,7 @@ export class ClientHomeComponent implements OnInit {
     private route: Router,
   ){}
     
-  private endpoint = inject(ConnectionService);
+  
 
   data: any[] = [];
   dataMS: any[] = [];

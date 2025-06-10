@@ -5,6 +5,7 @@ import { QuillModule } from 'ngx-quill';
 import { ArticleData } from '../../core/models/articleData.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbasService } from '../../core/services/sessionStorage.service';
+import { debounceTime } from 'rxjs/operators';
 
 
 @Component({
@@ -48,32 +49,62 @@ export class ArticleEditorComponent {
     height: '400px'
   };
 
-   constructor(
+  constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private abasService: AbasService
   ) {}
 
-ngOnInit() {
-  this.initializeForm();
-  
-  const id = this.route.snapshot.paramMap.get('id');
-  this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
-  
-  // Obter dados da aba atual
-  const aba = this.abasService.getAbaPorLink(this.router.url);
-  
-  if (aba?.dados) {
-    this.loadArticleData(aba.dados);
-  } else if (this.isEditMode && id) {
-    this.carregarArtigo(Number(id));
-  } else {
-    this.inicializarNovoArtigo();
+  ngOnInit() {
+    this.initializeForm();
+    
+    const id = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
+    
+    const aba = this.abasService.getAbaPorLink(this.router.url);
+    
+    if (aba?.dados) {
+      this.loadArticleData(aba.dados);
+    } else if (this.isEditMode && id) {
+      this.carregarArtigo(Number(id));
+    } else {
+      this.inicializarNovoArtigo();
+    }
+
+    const draft = this.abasService.getDadosAbaAtual<ArticleData>();
+    if (draft) {
+      this.articleForm.patchValue(draft);
+    }
+
+  // Escuta mudanças no form e salva no sessionStorage
+  this.articleForm.valueChanges
+    .pipe(debounceTime(300)) // Espera 300ms sem mudanças
+    .subscribe((val: Partial<ArticleData>) => {
+      this.abasService.salvarRascunhoAtual<ArticleData>({
+        ...val,
+        status: 'draft', // força o status como rascunho
+      });
+    });
   }
+  
+  ngAfterViewInit() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
+      
+      const aba = this.abasService.getAbaPorLink(this.router.url);
+      
+      if (aba?.dados) {
+        this.loadArticleData(aba.dados);
+      } else if (this.isEditMode && id) {
+        this.carregarArtigo(Number(id));
+      }
+    });
   }
-   inicializarNovoArtigo(): void {
-    // Inicializa o formulário com valores padrão para um novo artigo
+
+
+  inicializarNovoArtigo(): void {
     this.articleForm.patchValue({
       title: '',
       subtitle: '',
@@ -90,29 +121,15 @@ ngOnInit() {
       scheduledDate: ''
     });
     
-    // Limpa dados adicionais
     this.tags = [];
     this.showMovieRating = false;
-    
-    // Limpa critérios de avaliação
+  
     while (this.ratingCriteriaArray.length > 0) {
       this.ratingCriteriaArray.removeAt(0);
     }
   }
-  ngAfterViewInit() {
-  this.route.paramMap.subscribe(params => {
-    const id = params.get('id');
-    this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
-    
-    const aba = this.abasService.getAbaPorLink(this.router.url);
-    
-    if (aba?.dados) {
-      this.loadArticleData(aba.dados);
-    } else if (this.isEditMode && id) {
-      this.carregarArtigo(Number(id));
-    }
-  });
-}
+
+
 
   initializeForm() {
     this.articleForm = this.fb.group({
@@ -138,9 +155,11 @@ ngOnInit() {
   }
 
   loadArticleData(articleData: ArticleData) {
+
     this.articleForm.patchValue(articleData);
     this.tags = articleData.tags || [];
-    this.showMovieRating = !!articleData.movieRating;
+    // this.showMovieRating = !!articleData.movieRating;
+    this.showMovieRating = articleData.flagRated;
     
     if (articleData.movieRating?.criteria) {
       // Limpa critérios existentes
@@ -156,13 +175,7 @@ ngOnInit() {
   }
 
   carregarArtigo(id: number) {
-    // Implemente sua lógica para buscar do servidor
-    // Exemplo:
-    /*
-    this.api.getArtigo(id).subscribe(artigo => {
-      this.loadArticleData(artigo);
-    });
-    */
+    // implementar logica para buscar do servidor dpeois.
   }
 
   getCurrentDate(): string {
@@ -233,11 +246,12 @@ ngOnInit() {
     return articleData;
   }
 
-  onCancelClick() {
+  
+
+  
+  cancel() {
     this.onCancel.emit();
   }
-  
-cancel() {
-  this.onCancel.emit();
-}
+
+
 }

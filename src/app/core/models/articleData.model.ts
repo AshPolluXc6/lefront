@@ -3,7 +3,7 @@ export interface ArticleData {
   title: string;
   subtitle: string;
   category: string;
-  content: string;
+  content: string; //texto
   authorName: string;
   authorTitle: string;
   authorAvatar: string;
@@ -11,6 +11,8 @@ export interface ArticleData {
   readTime: number;
   tags: string[];
   featuredImage: string;
+  imagem?:string;
+  flagRated:boolean;
   movieRating?: {
     overallScore: number;
     criteria: Array<{ name: string; score: number }>;
