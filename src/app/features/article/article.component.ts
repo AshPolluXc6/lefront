@@ -53,16 +53,16 @@ export class ArticleComponent implements OnInit{
     'Artigos',
     'an-fill an-list'
   );
-}
+  }
 
-   abrirArtigo(row: any): void {
-  this.abasService.abrirAba({
-    basePath: '/admin/editor',
-    id: row.id,
-    label: `Editando ${row.nome}`,
-    dados: row
-  });
-}
+  abrirArtigo(row: any): void {
+    this.abasService.abrirAba({
+      basePath: '/admin/editor',
+      id: row.id,
+      label: `Editando ${row.nome}`,
+      dados: row
+    });
+  }
 
 
   

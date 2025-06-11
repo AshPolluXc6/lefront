@@ -25,26 +25,6 @@ export class AbasService {
   // PÚBLICOS
   // ===============================
 
-  getAbas(): Observable<Aba[]> {
-    return this.abasAbertas$;
-  }
-
-  getAbaPrincipal(): Aba | undefined {
-  return this.abasAbertasSubject.value.find(aba => aba.fixo);
-  }
-
-  getAbasSync(): Aba[] {
-    return this.abasAbertasSubject.getValue();
-  }
-
-  getAbaById(id: string): Observable<Aba | undefined> {
-    return this.abasAbertas$.pipe(
-      map(abas => abas.find(a => a.id === id)),
-      filter(Boolean),
-      distinctUntilChanged()
-    );
-  }
-
   abrirAbaPrincipal(basePath: string, label: string, icon?: string): void {
   const abas = this.abasAbertasSubject.getValue();
   const idAba = basePath;
@@ -55,13 +35,27 @@ export class AbasService {
       link: basePath,
       label,
       icon,
-      fixo: true // GARANTINDO QUE É FIXA
+      fixo: true
     };
     this.atualizarAbas([...abas, novaAba]);
   }
 
   this.router.navigateByUrl(basePath);
-}
+  }
+  
+  getAbas(): Observable<Aba[]> { return this.abasAbertas$; }
+  getAbaPrincipal(): Aba | undefined { return this.abasAbertasSubject.value.find(aba => aba.fixo); }
+  getAbasSync(): Aba[] { return this.abasAbertasSubject.getValue(); }
+  getAbaById(id: string): Observable<Aba | undefined> {
+    return this.abasAbertas$.pipe(
+      map(abas => abas.find(a => a.id === id)),
+      filter(Boolean),
+      distinctUntilChanged()
+    );
+  }
+
+
+
 
 salvarRascunhoAtual<T = any>(dadosParciais: Partial<T>): void {
   const urlAtual = this.router.url;
@@ -94,9 +88,7 @@ salvarRascunhoAtual<T = any>(dadosParciais: Partial<T>): void {
   const abasAtuais = this.abasAbertasSubject.getValue();
 
   // Gera ID único para a aba (basePath + id)
-  const idAba = config.id ? 
-  `${config.basePath}|${config.id}` : 
-  config.basePath;
+  const idAba = config.id ? `${config.basePath}|${config.id}` : config.basePath;
   
   // Gera o link de navegação
   const link = config.id ? `${config.basePath}/${config.id}` : config.basePath;

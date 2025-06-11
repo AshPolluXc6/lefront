@@ -1,10 +1,11 @@
+
 .tabs-container {
     position: relative;
     display: flex;
     align-items: center;
     padding: 5px;
     padding-left: 60px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid var(--color-brand-01-lighter);
     gap: 4px;
     overflow: visible;
 
@@ -16,7 +17,7 @@
       width: 100%;
       height: 5px;
       z-index: 0;
-      background-color: #ddd;
+      background-color: var(--color-brand-01-lighter);
     }
 
     a{
@@ -52,22 +53,25 @@
         gap: 10px;
         width: 100%;
       }
+      po-icon { color: var(--color-brand-01-base);}
 
       p {
-        // font-size: clamp(1px , 1rem, 16px);
         line-height: 16px;
+        color: var(--color-brand-01-base);
         max-width: 80%;
         font-size: .8rem;
         overflow: hidden;
         text-overflow: ellipsis;
         position: relative;
-        // border: 1px solid;
       }
       
       
       &.active {
-        background: #ddd;
-        color: rgb(25, 86, 143);
+        --tabcolor: #737373;
+        background: var(--color-brand-01-lighter);
+        
+        p{color: #FFBE17 !important; font-weight: 600;}
+        po-icon { color: #FFBE17}
         &:after{
           content: '';
           position: absolute;
@@ -78,7 +82,7 @@
           right: 100%;
           z-index: 99;
           border-bottom-right-radius: 50%;   
-          box-shadow: 6px 6px 0px 0px #ddd;          
+          box-shadow: 6px 6px 0px 0px var(--color-brand-01-lighter);          
 
         }
         &:before{
@@ -91,7 +95,7 @@
           left: 100%;
           z-index: 99;
           border-bottom-left-radius: 50%;  
-          box-shadow: -4px 4px 0px 0px #ddd;          
+          box-shadow: -4px 4px 0px 0px var(--color-brand-01-lighter);          
         }
       }
   
@@ -107,7 +111,7 @@
         position: absolute;
       }
       &:hover {
-        background: #ddd;
+        background: var(--color-brand-01-lighter);
       }
       &:hover button {
         animation: close 180ms linear forwards;
@@ -126,7 +130,7 @@
   po-icon {
     font-size: 17px;
     margin-bottom: -2px;
-    margin-right: 3px;
+    margin-right: 6px;
   }
     .new-tab-btn {
       margin-left: auto;
