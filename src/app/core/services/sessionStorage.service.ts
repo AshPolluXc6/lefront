@@ -15,6 +15,7 @@ export interface Aba<T = any> {
   providedIn: 'root',
 })
 export class AbasService {
+  
   private abasAbertasSubject = new BehaviorSubject<Aba[]>(this.carregarAbas());
   public abasAbertas$ = this.abasAbertasSubject.asObservable();
   private _abrirModalAbasFn: (() => void) | null = null;
