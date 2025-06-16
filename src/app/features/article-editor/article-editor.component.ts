@@ -1,11 +1,13 @@
-import { Component, Input, Output, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewEncapsulation, ChangeDetectorRef  } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { ArticleData } from '../../core/models/articleData.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbasService } from '../../core/services/sessionStorage.service';
 import { debounceTime } from 'rxjs/operators';
+import { ApiService } from '../../core/services/api.service';
+import { Queries } from '../../core/querys/queries';
 
 
 @Component({
@@ -14,7 +16,7 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
 })
-export class ArticleEditorComponent {
+export class ArticleEditorComponent implements OnInit {
   @Input() articleData?: ArticleData;
   @Input() isEditMode: boolean = false;
   @Output() onSave = new EventEmitter<ArticleData>();
@@ -25,6 +27,7 @@ export class ArticleEditorComponent {
   showMovieRating: boolean = false;
   newTag: string = '';
   tags: string[] = [];
+  category: any[] = [];
 
   quillModules = {
     toolbar: [
@@ -53,46 +56,126 @@ export class ArticleEditorComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private abasService: AbasService
+    private abasService: AbasService,
+    private apiService: ApiService,
+    private cdr: ChangeDetectorRef 
   ) {}
+  
+
+  loadData(): void {
+  const sql = Queries.categoria.selectAll;
+
+  this.apiService.query<{ id: number; nome: string }[]>(sql).subscribe({
+    next: (res) => {
+      this.category = res;
+      console.log('Categorias:', res);
+
+      // 🔁 Se você já tem dados carregados no form, aplique categoria de novo
+      const draft = this.abasService.getDadosAbaAtual<ArticleData>();
+      if (draft?.category) {
+        this.articleForm.patchValue({ categoria: draft.category });
+      }
+    }
+  });
+}
+  // ngOnInit() {
+  //   this.initializeForm();
+  //   this.loadData();
+    
+  //   // Inicializa o modo de edição
+  //   const id = this.route.snapshot.paramMap.get('id');
+  //   this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
+  // }
+
+  // ngAfterViewInit() {
+  //   // Carrega dados após a view ser inicializada
+  //   setTimeout(() => {
+  //     const aba = this.abasService.getAbaPorLink(this.router.url);
+      
+  //     if (aba?.dados) {
+  //       this.loadArticleData(aba.dados);
+  //     } else if (this.isEditMode && this.route.snapshot.paramMap.get('id')) {
+  //       const id = this.route.snapshot.paramMap.get('id');
+  //       this.carregarArtigo(Number(id));
+  //     } else {
+  //       this.inicializarNovoArtigo();
+  //     }
+
+  //     // Configura observadores após carga inicial
+  //     this.setupObservers();
+  //   });
+  // }
+  //  setupObservers() {
+  //   // Observador para salvar rascunho
+  //   this.articleForm.valueChanges
+  //     .pipe(debounceTime(300))
+  //     .subscribe(() => {
+  //       const draftData = this.buildArticleData();
+  //       draftData.status = 'draft';
+  //       this.abasService.salvarRascunhoAtual<ArticleData>(draftData);
+  //     });
+
+  //   // Observador para avaliação de filme
+  //   this.articleForm.get('flagRated')!.valueChanges
+  //     .subscribe(val => {
+  //       this.showMovieRating = val;
+  //       if (!val) {
+  //         this.ratingCriteriaArray.clear();
+  //         this.articleForm.get('overallScore')!.setValue(0);
+  //       }
+  //     }); 
+  // }
 
   ngOnInit() {
     this.initializeForm();
+    this.loadData();
+     
     
-    const id = this.route.snapshot.paramMap.get('id');
+    this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
     this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
     
-    const aba = this.abasService.getAbaPorLink(this.router.url);
-    
-    if (aba?.dados) {
-      this.loadArticleData(aba.dados);
-    } else if (this.isEditMode && id) {
+    // Carregue dados aqui diretamente
+    if (this.isEditMode && id) {
       this.carregarArtigo(Number(id));
     } else {
       this.inicializarNovoArtigo();
     }
-
-    const draft = this.abasService.getDadosAbaAtual<ArticleData>();
-    if (draft) {
-      this.articleForm.patchValue(draft);
-    }
-
-  // Escuta mudanças no form e salva no sessionStorage
-  this.articleForm.valueChanges
-    .pipe(debounceTime(300)) // Espera 300ms sem mudanças
-    .subscribe((val: Partial<ArticleData>) => {
-      this.abasService.salvarRascunhoAtual<ArticleData>({
-        ...val,
-        status: 'draft', // força o status como rascunho
-      });
     });
+    setTimeout(() => {
+      const draft = this.abasService.getDadosAbaAtual<ArticleData>();
+      if (draft) {
+        this.articleForm.patchValue(draft);
+      }
+    });
+
+    // Escuta mudanças no form e salva no sessionStorage
+    this.articleForm.valueChanges
+    .pipe(debounceTime(300))
+    .subscribe(() => {
+      // Reconstrói o ArticleData completo, incluindo movieRating quando aplicável
+      const draftData = this.buildArticleData();
+      draftData.status = 'draft';
+      this.abasService.salvarRascunhoAtual<ArticleData>(draftData);
+    });
+
+    this.articleForm.get('flagRated')!.valueChanges
+    .subscribe(val => {
+    this.showMovieRating = val;
+    // Opcional: se for false, limpar critérios e overallScore?
+    if (!val) {
+      // limpa ratingCriteria e zera overallScore, se fizer sentido:
+      this.ratingCriteriaArray.clear();
+      this.articleForm.get('overallScore')!.setValue(0);
+    }
+    }); 
   }
   
   ngAfterViewInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
-      
+       
       const aba = this.abasService.getAbaPorLink(this.router.url);
       
       if (aba?.dados) {
@@ -146,30 +229,40 @@ export class ArticleEditorComponent {
       overallScore: [0],
       ratingCriteria: this.fb.array([]),
       status: ['draft'],
-      scheduledDate: ['']
+      tags: this.fb.array([]),
+      scheduledDate: [''],
+      flagRated: [false]
     });
   }
 
   get ratingCriteriaArray() {
     return this.articleForm.get('ratingCriteria') as any;
   }
-
+  get tagsArray() {
+  return this.articleForm.get('tags') as FormArray;
+  }
+  
   loadArticleData(articleData: ArticleData) {
+    this.articleForm.patchValue({
+      ...articleData,
+      tags: [],
+      flagRated: articleData.flagRated ?? false,
+      overallScore: articleData.movieRating?.overallScore ?? 0 });
 
-    this.articleForm.patchValue(articleData);
     this.tags = articleData.tags || [];
     // this.showMovieRating = !!articleData.movieRating;
     this.showMovieRating = articleData.flagRated;
+    const tagsArray = this.articleForm.get('tags') as FormArray;
+    tagsArray.clear();
+
+    if(articleData.tags && articleData.tags.length) {articleData.tags.forEach(tag => {tagsArray.push(new FormControl(tag));});}
     
-    if (articleData.movieRating?.criteria) {
-      // Limpa critérios existentes
-      while (this.ratingCriteriaArray.length) {
-        this.ratingCriteriaArray.removeAt(0);
-      }
-      
-      // Adiciona novos critérios
-      articleData.movieRating.criteria.forEach(criterion => {
-        this.addCriterion(criterion);
+    // rating logica 
+    this.ratingCriteriaArray.clear();
+
+    if (articleData.movieRating?.criteria?.length) {
+    articleData.movieRating.criteria.forEach(criterion => {
+      this.addCriterion(criterion);
       });
     }
   }
@@ -188,14 +281,15 @@ export class ArticleEditorComponent {
   }
 
   addTag() {
-    if (this.newTag.trim() && !this.tags.includes(this.newTag.trim())) {
-      this.tags.push(this.newTag.trim());
-      this.newTag = '';
-    }
+  const tagValue = this.newTag.trim();
+  if (tagValue && !this.tagsArray.value.includes(tagValue)) {
+    this.tagsArray.push(new FormControl(tagValue));
+    this.newTag = '';
+  }
   }
 
   removeTag(index: number) {
-    this.tags.splice(index, 1);
+  this.tagsArray.removeAt(index);
   }
 
   addCriterion(criterion?: { name: string; score: number }) {
@@ -211,42 +305,81 @@ export class ArticleEditorComponent {
   }
 
   saveDraft() {
-    if (this.articleForm.valid) {
-      const articleData = this.buildArticleData();
-      articleData.status = 'draft';
-      this.onSave.emit(articleData);
+  if (this.articleForm.invalid) return;
+
+  const data = this.buildArticleData();
+  data.status = 'draft'; // isso será usado para setar o `flagrascunho = 1` no backend
+
+  this.apiService.post('/publicacao', data).subscribe({
+    next: (res) => {
+      console.log('Rascunho salvo:', res);
+    },
+    error: (err) => {
+      console.error('Erro ao salvar rascunho:', err);
     }
-  }
+  });
+}
 
   publishArticle() {
-    if (this.articleForm.valid) {
-      const articleData = this.buildArticleData();
-      if (articleData.status === 'draft') {
-        articleData.status = 'published';
+    if (this.articleForm.invalid) return;
+
+    const formData = this.articleForm.value;
+
+    const publicacao = {
+      nome: formData.titulo,
+      fichatecnica: formData.fichatecnica,
+      imagemcapa: formData.imagemCapa,
+      imagem: formData.imagem,
+      texto: formData.texto,
+      usuario_id: '', // supondo que você tenha isso salvo
+      flagfinalizada: true,
+      flagautorizada: false,
+      flagrascunho: false,
+      flagexcluido: false,
+      datacadastro: new Date().toISOString(),
+      dataalterado: new Date().toISOString(),
+      categoria_id: formData.categoriaId,
+      flagdestaque: formData.flagdestaque ?? false,
+      flagcritica: formData.flagcritica ?? false,
+      flagnoticia: formData.flagnoticia ?? false,
+      nota: formData.nota ?? null
+    };
+
+    this.apiService.post('/publicacao', publicacao).subscribe({
+      next: (res) => {
+        console.log('Publicado com sucesso', res);
+        // feedback para usuário, redirecionamento etc.
+      },
+      error: (err) => {
+        console.error('Erro ao publicar', err);
       }
-      this.onPublish.emit(articleData);
-    }
+    });
   }
 
   buildArticleData(): ArticleData {
-    const formValue = this.articleForm.value;
-    const articleData: ArticleData = {
-      ...formValue,
-      tags: this.tags,
-      id: this.articleData?.id
+  const formValue = this.articleForm.value;
+  const articleData: ArticleData = {
+    ...formValue,
+    tags: this.tagsArray.value,
+    id: this.articleData?.id,
+    flagRated: formValue.flagRated
+  };
+
+  if (formValue.flagRated) {
+    articleData.movieRating = {
+      overallScore: formValue.overallScore,
+      criteria: this.ratingCriteriaArray.value
     };
-
-    if (this.showMovieRating) {
-      articleData.movieRating = {
-        overallScore: formValue.overallScore,
-        criteria: formValue.ratingCriteria
-      };
-    }
-
-    return articleData;
+  } else {
+    delete articleData.movieRating;
   }
 
-  
+  return articleData;
+}
+
+trackByCategoria(index: number, item: { categoria_id: any; nome: string }) {
+  return item.categoria_id;
+}
 
   
   cancel() {

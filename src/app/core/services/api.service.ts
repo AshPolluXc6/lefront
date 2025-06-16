@@ -46,9 +46,9 @@ export class ApiService {
   }
 
 
-  query<T>(sql: string): Observable<T> {
-    alert('chamou');
-  return this.post<T>(environment.api.endpoints.sql, { q: sql }).pipe(
+  query<T>(sql: string, params?: Record<string, any>): Observable<T> {
+  const payload = params ? { q: sql, params } : { q: sql };
+  return this.post<T>(environment.api.endpoints.sql, payload).pipe(
     catchError(error => {
       console.error('Erro na query:', error);
       throw error;

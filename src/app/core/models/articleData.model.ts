@@ -3,7 +3,7 @@ export interface ArticleData {
   title: string;
   subtitle: string;
   category: string;
-  content: string; //texto
+  content: string; 
   authorName: string;
   authorTitle: string;
   authorAvatar: string;

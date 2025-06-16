@@ -9,6 +9,16 @@ export const Queries = {
     selectAll: `SELECT * FROM publicacao`,
     update: `UPDATE publicacao SET nome = ? WHERE id = ?`,
     delete: `DELETE FROM publicacao where`,
-    insert: `INSERT INTO publicacao`
+    insert: `INSERT INTO publicacao 
+    (publicacao_id, nome, fichatecnica, imagemcapa, imagem, texto, usuario_id,
+    flagfinalizada, flagautorizada, flagrascunho, flagexcluido,
+    categoria_id, nota)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   },
+  categoria: {
+    selectAll: `SELECT * FROM categoria`,
+    update: `UPDATE publicacao SET nome = ? WHERE id = ?`,
+    delete: `DELETE FROM publicacao where`,
+    insert: `INSERT INTO publicacao`
+  }
 };
