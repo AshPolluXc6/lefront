@@ -62,86 +62,23 @@ export class ArticleEditorComponent implements OnInit {
   ) {}
   
 
-  loadData(): void {
-  const sql = Queries.categoria.selectAll;
-
-  this.apiService.query<{ id: number; nome: string }[]>(sql).subscribe({
-    next: (res) => {
-      this.category = res;
-      console.log('Categorias:', res);
-
-      // 🔁 Se você já tem dados carregados no form, aplique categoria de novo
-      const draft = this.abasService.getDadosAbaAtual<ArticleData>();
-      if (draft?.category) {
-        this.articleForm.patchValue({ categoria: draft.category });
-      }
-    }
-  });
-}
-  // ngOnInit() {
-  //   this.initializeForm();
-  //   this.loadData();
-    
-  //   // Inicializa o modo de edição
-  //   const id = this.route.snapshot.paramMap.get('id');
-  //   this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
-  // }
-
-  // ngAfterViewInit() {
-  //   // Carrega dados após a view ser inicializada
-  //   setTimeout(() => {
-  //     const aba = this.abasService.getAbaPorLink(this.router.url);
-      
-  //     if (aba?.dados) {
-  //       this.loadArticleData(aba.dados);
-  //     } else if (this.isEditMode && this.route.snapshot.paramMap.get('id')) {
-  //       const id = this.route.snapshot.paramMap.get('id');
-  //       this.carregarArtigo(Number(id));
-  //     } else {
-  //       this.inicializarNovoArtigo();
-  //     }
-
-  //     // Configura observadores após carga inicial
-  //     this.setupObservers();
-  //   });
-  // }
-  //  setupObservers() {
-  //   // Observador para salvar rascunho
-  //   this.articleForm.valueChanges
-  //     .pipe(debounceTime(300))
-  //     .subscribe(() => {
-  //       const draftData = this.buildArticleData();
-  //       draftData.status = 'draft';
-  //       this.abasService.salvarRascunhoAtual<ArticleData>(draftData);
-  //     });
-
-  //   // Observador para avaliação de filme
-  //   this.articleForm.get('flagRated')!.valueChanges
-  //     .subscribe(val => {
-  //       this.showMovieRating = val;
-  //       if (!val) {
-  //         this.ratingCriteriaArray.clear();
-  //         this.articleForm.get('overallScore')!.setValue(0);
-  //       }
-  //     }); 
-  // }
-
+  
   ngOnInit() {
     this.initializeForm();
     this.loadData();
-     
+    
     
     this.route.paramMap.subscribe(params => {
-    const id = params.get('id');
-    this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
+      const id = params.get('id');
+      this.isEditMode = id !== null && id !== 'novo' && !id.startsWith('novo-');
     
-    // Carregue dados aqui diretamente
-    if (this.isEditMode && id) {
-      this.carregarArtigo(Number(id));
-    } else {
-      this.inicializarNovoArtigo();
-    }
+      if (this.isEditMode && id) {
+        this.carregarArtigo(Number(id));
+      } else {
+        this.inicializarNovoArtigo();
+      }
     });
+
     setTimeout(() => {
       const draft = this.abasService.getDadosAbaAtual<ArticleData>();
       if (draft) {
@@ -149,11 +86,9 @@ export class ArticleEditorComponent implements OnInit {
       }
     });
 
-    // Escuta mudanças no form e salva no sessionStorage
     this.articleForm.valueChanges
     .pipe(debounceTime(300))
     .subscribe(() => {
-      // Reconstrói o ArticleData completo, incluindo movieRating quando aplicável
       const draftData = this.buildArticleData();
       draftData.status = 'draft';
       this.abasService.salvarRascunhoAtual<ArticleData>(draftData);
@@ -162,15 +97,13 @@ export class ArticleEditorComponent implements OnInit {
     this.articleForm.get('flagRated')!.valueChanges
     .subscribe(val => {
     this.showMovieRating = val;
-    // Opcional: se for false, limpar critérios e overallScore?
     if (!val) {
-      // limpa ratingCriteria e zera overallScore, se fizer sentido:
       this.ratingCriteriaArray.clear();
       this.articleForm.get('overallScore')!.setValue(0);
     }
-    }); 
-  }
-  
+  }); 
+}
+
   ngAfterViewInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -185,7 +118,79 @@ export class ArticleEditorComponent implements OnInit {
       }
     });
   }
+  
+  loadData(): void {
+    const sql = Queries.categoria.selectAll;
+  
+    this.apiService.query<{ id: number; nome: string }[]>(sql).subscribe({
+      next: (res) => {
+        this.category = res;
+        console.log('Categorias:', res);
+  
+        const draft = this.abasService.getDadosAbaAtual<ArticleData>();
+        if (draft?.category) {
+          this.articleForm.patchValue({ categoria: draft.category });
+        }
+      }
+    });
+  }
 
+  buildArticleData(): ArticleData {
+    const formValue = this.articleForm.value;
+    const articleData: ArticleData = {
+      ...formValue,
+      tags: this.tagsArray.value,
+      id: this.articleData?.id,
+      flagRated: formValue.flagRated
+    };
+
+    if (formValue.flagRated) {
+      articleData.movieRating = {
+        overallScore: formValue.overallScore,
+        criteria: this.ratingCriteriaArray.value
+      };
+    } else {
+      delete articleData.movieRating;
+    }
+
+    return articleData;
+  }
+
+  publishArticle() {
+    if (this.articleForm.invalid) return;
+
+    const formData = this.articleForm.value;
+
+    const publicacao = {
+      nome: formData.titulo,
+      fichatecnica: formData.fichatecnica,
+      imagemcapa: formData.imagemCapa,
+      imagem: formData.imagem,
+      texto: formData.texto,
+      usuario_id: '', // lembrar de salvar perfil no sessionStorage
+      flagfinalizada: true,
+      flagautorizada: false,
+      flagrascunho: false,
+      flagexcluido: false,
+      datacadastro: new Date().toISOString(),
+      dataalterado: new Date().toISOString(),
+      categoria_id: formData.categoriaId,
+      flagdestaque: formData.flagdestaque ?? false,
+      flagcritica: formData.flagcritica ?? false,
+      flagnoticia: formData.flagnoticia ?? false,
+      nota: formData.nota ?? null
+    };
+
+    this.apiService.post('/publicacao', publicacao).subscribe({
+      next: (res) => {
+        console.log('Publicado com sucesso', res);
+        // feedback para usuário, redirecionamento etc.
+      },
+      error: (err) => {
+        console.error('Erro ao publicar', err);
+      }
+    });
+  }
 
   inicializarNovoArtigo(): void {
     this.articleForm.patchValue({
@@ -211,8 +216,6 @@ export class ArticleEditorComponent implements OnInit {
       this.ratingCriteriaArray.removeAt(0);
     }
   }
-
-
 
   initializeForm() {
     this.articleForm = this.fb.group({
@@ -320,62 +323,8 @@ export class ArticleEditorComponent implements OnInit {
   });
 }
 
-  publishArticle() {
-    if (this.articleForm.invalid) return;
 
-    const formData = this.articleForm.value;
-
-    const publicacao = {
-      nome: formData.titulo,
-      fichatecnica: formData.fichatecnica,
-      imagemcapa: formData.imagemCapa,
-      imagem: formData.imagem,
-      texto: formData.texto,
-      usuario_id: '', // supondo que você tenha isso salvo
-      flagfinalizada: true,
-      flagautorizada: false,
-      flagrascunho: false,
-      flagexcluido: false,
-      datacadastro: new Date().toISOString(),
-      dataalterado: new Date().toISOString(),
-      categoria_id: formData.categoriaId,
-      flagdestaque: formData.flagdestaque ?? false,
-      flagcritica: formData.flagcritica ?? false,
-      flagnoticia: formData.flagnoticia ?? false,
-      nota: formData.nota ?? null
-    };
-
-    this.apiService.post('/publicacao', publicacao).subscribe({
-      next: (res) => {
-        console.log('Publicado com sucesso', res);
-        // feedback para usuário, redirecionamento etc.
-      },
-      error: (err) => {
-        console.error('Erro ao publicar', err);
-      }
-    });
-  }
-
-  buildArticleData(): ArticleData {
-  const formValue = this.articleForm.value;
-  const articleData: ArticleData = {
-    ...formValue,
-    tags: this.tagsArray.value,
-    id: this.articleData?.id,
-    flagRated: formValue.flagRated
-  };
-
-  if (formValue.flagRated) {
-    articleData.movieRating = {
-      overallScore: formValue.overallScore,
-      criteria: this.ratingCriteriaArray.value
-    };
-  } else {
-    delete articleData.movieRating;
-  }
-
-  return articleData;
-}
+  
 
 trackByCategoria(index: number, item: { categoria_id: any; nome: string }) {
   return item.categoria_id;
