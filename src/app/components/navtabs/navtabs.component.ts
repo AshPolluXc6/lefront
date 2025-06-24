@@ -68,7 +68,7 @@ export class NavtabsComponent {
     }
   }
 
-  // SOLUÇÃO: Mantém abas fixas + abas do módulo atual
+  // Mantém abas fixas + abas do módulo atual
   get abasFiltradas() {
     return this.abasAbertas.filter(aba => 
       aba.fixo || // Mantém todas as abas fixas
