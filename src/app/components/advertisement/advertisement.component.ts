@@ -10,8 +10,8 @@ import { Component, Input } from '@angular/core';
 export class AdvertisementComponent {
   @Input() adClass: string = 'banner';
   @Input() label: string = 'Publicidade';
-  @Input() title: string = 'Streaming Premium';
-  @Input() description: string = 'Assista aos melhores filmes e séries em 4K. Teste grátis por 30 dias.';
+  @Input() title: string = 'Anuncie Seu Negócio Aqui';
+  @Input() description: string = 'Todos os direitos do espaço em destaque reservados ao anunciante';
   @Input() buttonText: string = 'Saiba Mais';
   @Input() showButton: boolean = true;
 }

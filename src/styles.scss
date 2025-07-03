@@ -1,13 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 @import 'quill/dist/quill.snow.css';
+
+
+
+ .article-text {
+      margin-bottom: var(--spacing-xl);
+      max-width: 100%;
+      width: 100%;
+      min-width: 0;
+      
+       p {
+          max-width: 100%;
+          width: 100%;
+          min-width: 0;
+          margin-bottom: var(--spacing-lg);
+          font-size: 1.1rem;
+          line-height: 1.8;
+
+          &:first-of-type {
+            max-width: 100%;
+            width: 100%;
+            min-width: 0;
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xl);
+            font-weight: 400;
+          }
+        }
+         
+      h2 {
+        font-size: 2rem;
+        margin: var(--spacing-2xl) 0 var(--spacing-lg) 0;
+        color: var(--color-text-primary);
+      }
+
+    }
+
+
+
 * {
     margin:0;
     padding:0;
     box-sizing: border-box;
 }
 
-
 :root {
+
+  
+  
+
 // po-menu -------
     --color-brand-01-base: #8e8e8e; //cor dos icones
     --color-brand-01-dark: #FFBE17; // cor do icon(arrow) de subitems 

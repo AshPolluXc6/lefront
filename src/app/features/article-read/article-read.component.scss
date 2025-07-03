@@ -54,7 +54,9 @@
     }
 
     .article-content {
-      max-width: none;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
     }
 
     .movie-showcase {
@@ -85,29 +87,6 @@
       font-size: 0.9rem;
     }
 
-    .article-text {
-      margin-bottom: var(--spacing-xl);
-    }
-
-    .lead-paragraph {
-      font-size: 1.25rem;
-      line-height: 1.7;
-      color: var(--color-text-secondary);
-      margin-bottom: var(--spacing-xl);
-      font-weight: 400;
-    }
-
-    .article-text p {
-      margin-bottom: var(--spacing-lg);
-      font-size: 1.1rem;
-      line-height: 1.8;
-    }
-
-    .section-title {
-      font-size: 2rem;
-      margin: var(--spacing-2xl) 0 var(--spacing-lg) 0;
-      color: var(--color-text-primary);
-    }
 
     .article-quote {
       background: var(--color-surface);
@@ -340,3 +319,4 @@
         justify-content: center;
       }
     }
+    

@@ -4,7 +4,7 @@
         <div class="container">
           <div class="nav-content">
             <div class="logo">
-              <h2 class="font-primary text-primary">CineVibe</h2>
+              <h2 class="font-primary text-primary"></h2>
             </div>
             <div class="nav-links">
               <a href="#" class="nav-link">Críticas</a>
@@ -16,24 +16,23 @@
         </div>
       </nav>
 
-      <!-- Article Header -->
+      <!-- Header do Artigo -->
       @for (item of data; let i = $index; track $index) {
         @if (i === 0) {
           <app-article-header
           title="{{item.nome}}"
           subtitle="{{item.nome}}"
-          authorName="{{item.user.}}"
+          authorName="{{item.usuario.nome}}"
+          category="{{item.categoria.nome}}"
+          authorTitle="{{item.usuario.perfil_id || 'Usuario Sem Cargo'}}"
+          publishDate="{{item.dataalterado | date:'d \'de\' MMM \' yyyy':'pt'}}"
           ></app-article-header>
         }
       }
 
-      <!-- Top Advertisement Banner -->
+      <!--  Banner Anuncio -->
       <div class="container">
-        <app-advertisement 
-          adClass="banner"
-          title="Explore o Cinema Mundial"
-          description="Descubra os filmes mais aclamados de todos os tempos em nossa plataforma premium."
-          buttonText="Comece Agora">
+        <app-advertisement >
         </app-advertisement>
       </div>
 
@@ -46,71 +45,30 @@
             <article class="article-content">
               
               <!-- Movie Poster Section -->
-              <div class="movie-showcase card">
-                <img src="https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=2" 
-                     alt="Cena do filme" 
-                     class="movie-poster">
-                <div class="movie-info">
-                  <h3 class="font-primary">O Filme em Destaque</h3>
-                  <p class="movie-details">Direção: Christopher Nolan | Ano: 2023 | Duração: 148 min</p>
+              @for(item of data; let i = $index; track $index){
+                @if( i === 0 ) {
+                <div class="movie-showcase card">
+                  <img src="{{item.imagemcapa}}" 
+                      alt="Capa do filme" 
+                      class="movie-poster">
+                  <div class="movie-info">
+                    <h3 class="font-primary">{{item.nome}}</h3>
+                    <p class="movie-details">Direção: {{ item.direcao }} | Ano: {{item.lancamento}} | Duração: {{item.duracao}} {{item.duracao_tipo}}</p>
+                  </div>
                 </div>
-              </div>
+                }
+              }
 
               <!-- Article Text Content -->
-              <div class="article-text">
-                <p class="lead-paragraph">
-                  O cinema contemporâneo está passando por uma transformação sem precedentes. Diretores emergentes estão desafiando as convenções narrativas tradicionais, criando experiências cinematográficas que transcendem as fronteiras entre realidade e ficção.
-                </p>
-
-                <p>
-                  Esta revolução não é apenas técnica, mas também conceitual. Estamos testemunhando uma geração de cineastas que cresceu imersa na cultura digital, trazendo uma nova linguagem visual que dialoga diretamente com o público contemporâneo. A narrativa não-linear, o uso inovador da tecnologia e a integração de elementos interativos estão redefinindo o que significa "assistir a um filme".
-                </p>
-
-                <h2 class="section-title font-primary">A Nova Linguagem Cinematográfica</h2>
-
-                <p>
-                  Os filmes de hoje não seguem mais a estrutura clássica de três atos de forma rígida. Diretores como Denis Villeneuve, Ari Aster e Jordan Peele estão experimentando com cronologias fragmentadas, múltiplas perspectivas e finais abertos que convidam o espectador a participar ativamente da construção do significado.
-                </p>
-
-                <blockquote class="article-quote">
-                  "O cinema não é apenas entretenimento; é uma forma de explorar a condição humana através de linguagens visuais e sonoras que transcendem as barreiras culturais."
-                  <cite>— Martin Scorsese</cite>
-                </blockquote>
-
-                <p>
-                  A tecnologia também desempenha um papel fundamental nesta transformação. Desde a popularização das câmeras digitais de alta qualidade até os avanços em CGI e realidade virtual, os cineastas têm acesso a ferramentas que permitem materializar visões antes consideradas impossíveis.
-                </p>
-
-                <h2 class="section-title font-primary">O Impacto das Plataformas de Streaming</h2>
-
-                <p>
-                  As plataformas de streaming revolucionaram não apenas como consumimos cinema, mas também como ele é produzido. Netflix, Amazon Prime, Apple TV+ e outras plataformas estão investindo bilhões em conteúdo original, dando oportunidades para cineastas experimentarem com formatos e narrativas que talvez não encontrassem espaço no cinema tradicional.
-                </p>
-
-                <p>
-                  Esta democratização da distribuição permite que histórias mais diversas e experimentais alcancem audiências globais. Filmes de países anteriormente sub-representados no cenário internacional, como "Parasita" da Coreia do Sul ou "Roma" do México, conquistaram não apenas críticos, mas também o público mainstream.
-                </p>
-              </div>
+               @for(item of data; let i = $index; track $index){
+                @if(i === 0) {
+                  <div class="article-text"[innerHTML]="getTextoFormatado(item.texto)"></div>
+                }
+              }
 
               <!-- Movie Rating Section -->
-              <app-movie-rating></app-movie-rating>
-
-              <!-- Additional Content -->
-              <div class="article-text">
-                <h2 class="section-title font-primary">O Futuro do Cinema</h2>
-
-                <p>
-                  Olhando para o futuro, podemos esperar ainda mais inovação. A realidade virtual e aumentada promete criar experiências cinematográficas completamente imersivas. A inteligência artificial está sendo utilizada tanto na produção (edição automatizada, efeitos visuais) quanto na distribuição (recomendações personalizadas, análise de audiência).
-                </p>
-
-                <p>
-                  No entanto, em meio a toda essa inovação tecnológica, o elemento humano permanece central. As melhores experiências cinematográficas continuam sendo aquelas que nos conectam emocionalmente, que nos fazem refletir sobre nossa própria humanidade e que nos inspiram a ver o mundo de forma diferente.
-                </p>
-
-                <p>
-                  O cinema do futuro será, provavelmente, uma síntese entre tradição e inovação, mantendo a essência narrativa que torna esta arte tão poderosa, enquanto abraça as possibilidades tecnológicas que expandem seus horizontes criativos.
-                </p>
-              </div>
+              <app-movie-rating>
+              </app-movie-rating>
 
               <!-- Article Footer -->
               <footer class="article-footer">
@@ -133,11 +91,7 @@
             <aside class="sidebar">
               
               <!-- Sidebar Ad -->
-              <app-advertisement 
-                adClass="sidebar"
-                title="Cursos de Cinema"
-                description="Aprenda com os melhores profissionais da indústria cinematográfica."
-                buttonText="Inscreva-se">
+              <app-advertisement >
               </app-advertisement>
 
               <!-- Related Articles -->
@@ -186,11 +140,7 @@
 
       <!-- Footer Advertisement -->
       <div class="container">
-        <app-advertisement 
-          adClass="footer"
-          title="Equipamentos Cinematográficos"
-          description="Encontre as melhores câmeras, lentes e equipamentos para sua produção."
-          buttonText="Ver Produtos">
+        <app-advertisement >
         </app-advertisement>
       </div>
 
@@ -199,7 +149,7 @@
         <div class="container">
           <div class="footer-content">
             <div class="footer-section">
-              <h3 class="font-primary text-primary">CineVibe</h3>
+              <h3 class="font-primary text-primary"></h3>
               <p>Sua fonte confiável para críticas e análises cinematográficas.</p>
             </div>
             
@@ -225,7 +175,7 @@
           </div>
           
           <div class="footer-bottom">
-            <p>&copy; 2025 CineVibe. Todos os direitos reservados.</p>
+            <p>&copy; 2025 LeParler. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
