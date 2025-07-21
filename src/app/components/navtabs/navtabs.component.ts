@@ -20,10 +20,10 @@ import { poModules } from '../../po.imports';
   styleUrl: './navtabs.component.scss'
 })
 export class NavtabsComponent {
-  @Input() novaAbaLabel: string = '+ Nova Aba';
-  @Input() labelNaoFechavel: string = ''; // opcional: para proteger abas com este label
+  @Input() novaAbaLabel: string = '+';
+  // @Input() labelNaoFechavel: string = '';
   @Input() maximoAbas: number = 21;
-  @Input() viewInRout: string[] = [];
+  // @Input() viewInRout: string[] = [];
 
   rotaBase: string = '';
   rotaVisivel = false;
@@ -37,11 +37,7 @@ export class NavtabsComponent {
       .subscribe((event: NavigationEnd) => {
         const url = event.urlAfterRedirects || event.url;
         this.rotaBase = this.getBaseRota(url);
-        this.rotaVisivel = this.viewInRout.some(r => this.rotaBase.includes(r));
-        
-        if (this.rotaVisivel) {
-          this.abrirAbaAtual();
-        }
+        // this.rotaVisivel = this.viewInRout.some(r => this.rotaBase.includes(r));
       });
 
     this.abasService.getAbas().subscribe(abas => {

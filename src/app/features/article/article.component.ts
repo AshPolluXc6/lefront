@@ -36,7 +36,7 @@ export class ArticleComponent implements OnInit{
   readonly tableCustomActions = [
     {
       label: 'Abrir',
-      action: this.abrirUsuario.bind(this),
+      action: this.abrirArtigo.bind(this),
       icon: 'po-icon-eye'
     }
   ];
@@ -48,11 +48,7 @@ export class ArticleComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-  this.abasService.abrirAbaPrincipal(
-    '/admin/articles',
-    'Artigos',
-    'an-fill an-list'
-  );
+    this.abasService.abrirAbaPrincipal('/admin/articles', 'Artigos', 'an-fill an-list');
   }
 
   abrirArtigo(row: any): void {
@@ -63,33 +59,19 @@ export class ArticleComponent implements OnInit{
       dados: row
     });
   }
-
-
   
   novoArtigo(): void {
-  const novoId = 'novo-' + Date.now();
+    const novoId = 'novo-' + Date.now();
   
-  this.abasService.abrirAba({
-    basePath: '/admin/editor',
-    id: novoId,
-    label: 'Novo Artigo',
-    dados: {
-      title: '',
-      content: '',
-      status: 'draft'
-    }
-  });
-}
-
-  abrirUsuario(row: any): void {
-    const id = row.id;
-    
-    // Passa os dados diretamente para a aba
     this.abasService.abrirAba({
       basePath: '/admin/editor',
-      id: id,
-      label: `Editando ${row.nome}`,
-      dados: row // Passa os dados do artigo para o editor
+      id: novoId,
+      label: 'Novo Artigo',
+      dados: {
+        title: '',
+        content: '',
+        status: 'draft'
+     }
     });
   }
 }

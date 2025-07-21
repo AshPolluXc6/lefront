@@ -8,10 +8,11 @@ import { AbasService } from '../../core/services/sessionStorage.service';
 import { debounceTime } from 'rxjs/operators';
 import { ApiService } from '../../core/services/api.service';
 import { Queries } from '../../core/querys/queries';
+import { NavtabsComponent } from '../../components/navtabs/navtabs.component';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, QuillModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, QuillModule, NavtabsComponent],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
 })
@@ -98,6 +99,7 @@ export class ArticleEditorComponent implements OnInit {
           this.articleForm.get('overallScore')!.setValue(0);
         }
       });
+
   }
 
   ngAfterViewInit() {
