@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 export interface Aba<T = any> {
   id: string;
+  modulo: string; // Nova propriedade para identificar o módulo
   label: string;
   link: string;
   icon?: string;
@@ -22,23 +23,44 @@ export class AbasService {
 
   constructor(private router: Router) {}
 
-  abrirAbaPrincipal(basePath: string, label: string, icon?: string): void {
+ abrirAbaPrincipal(basePath: string, label: string, icon?: string): void {
   const abas = this.abasAbertasSubject.getValue();
-  const idAba = basePath;
-
-  if (!abas.some(a => a.id === idAba)) { 
-    const novaAba: Aba = {
-      id: idAba,
-      link: basePath,
-      label,
-      icon,
-      fixo: true
-    };
-    this.atualizarAbas([...abas, novaAba]);
+  const modulo = basePath.split('/').pop() || '';
+  
+  if (!modulo) {
+    console.error('Não foi possível determinar o módulo para:', basePath);
+    return;
   }
 
-  this.router.navigateByUrl(basePath);
+  // Verifica se já existe uma aba principal para este módulo
+  const abaPrincipalExistente = abas.find(aba => 
+    aba.fixo && aba.modulo === modulo
+  );
+
+  if (abaPrincipalExistente) {
+    // Se já existe, apenas navega para ela
+    if (this.router.url !== basePath) {
+      this.router.navigateByUrl(basePath);
+    }
+    return;
   }
+
+  // Cria nova aba principal
+  const novaAba: Aba = {
+    id: `principal-${modulo}`, // ID único para cada aba principal
+    modulo,
+    link: basePath,
+    label,
+    icon,
+    fixo: true
+  };
+
+  this.atualizarAbas([...abas, novaAba]);
+
+  if (this.router.url !== basePath) {
+    this.router.navigateByUrl(basePath);
+  }
+}
 
   private carregarAbas(): Aba[] {
     try {
@@ -78,6 +100,7 @@ export class AbasService {
   dados?: T;
   navegar?: boolean;
 }): void {
+  const modulo = config.basePath.split('/')[2];
   const abasAtuais = this.abasAbertasSubject.getValue();
   const idAba = config.id ? `${config.basePath}|${config.id}` : config.basePath;
   const link = config.id ? `${config.basePath}/${config.id}` : config.basePath;
@@ -99,6 +122,7 @@ export class AbasService {
 
   const novaAba: Aba<T> = {
     id: idAba,
+    modulo,
     label,
     link,
     icon: config.icon,

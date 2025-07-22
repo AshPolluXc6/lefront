@@ -18,8 +18,12 @@
       ></po-toolbar>
 
     @if(showNavtabs) {
-      <app-navtabs></app-navtabs>
-    }
+  <app-navtabs 
+    [grupoRotas]="rotasComAbas"
+    novaAbaLabel="+" 
+    [maximoAbas]="10"
+  ></app-navtabs>
+}
 
     <div class="router-container">
       <router-outlet></router-outlet>

@@ -1,60 +1,96 @@
-import { Component, Input } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { filter } from 'rxjs';
+// navtabs.component.ts
+import { Component, Input, OnDestroy, ChangeDetectorRef  } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter, takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { Subject, combineLatest } from 'rxjs';
 import { AbasService, Aba } from '../../core/services/sessionStorage.service';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { PoAvatarModule, PoIconModule } from '@po-ui/ng-components';
-import { poModules } from '../../po.imports';
+import { PoIconModule } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-navtabs',
   standalone: true,
-  imports: [
-    CommonModule,
-    PoAvatarModule,
-    PoIconModule,
-    ...poModules
-  ],
+  imports: [CommonModule, PoIconModule],
   templateUrl: './navtabs.component.html',
-  styleUrl: './navtabs.component.scss'
+  styleUrls: ['./navtabs.component.scss']
 })
-export class NavtabsComponent {
+export class NavtabsComponent implements OnDestroy {
   @Input() novaAbaLabel: string = '+';
-  // @Input() labelNaoFechavel: string = '';
   @Input() maximoAbas: number = 21;
-  // @Input() viewInRout: string[] = [];
+  
+  @Input() set grupoRotas(value: string[]) {
+    this._grupoRotas = value;
+    this.atualizarAbasVisiveis();
+  }
+  get grupoRotas(): string[] {
+    return this._grupoRotas;
+  }
+  private _grupoRotas: string[] = [];
+  
+  abasVisiveis: Aba[] = [];
+  mostrarComponente = false;
+  
+  private destroy$ = new Subject<void>();
 
-  rotaBase: string = '';
-  rotaVisivel = false;
-  abasAbertas: Aba[] = [];
-
-  constructor(private router: Router, private abasService: AbasService, private activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        const url = event.urlAfterRedirects || event.url;
-        this.rotaBase = this.getBaseRota(url);
-        // this.rotaVisivel = this.viewInRout.some(r => this.rotaBase.includes(r));
-      });
-
-    this.abasService.getAbas().subscribe(abas => {
-      this.abasAbertas = abas;
+  constructor(
+    private router: Router, 
+    private abasService: AbasService,
+    private cdr: ChangeDetectorRef
+  ) {
+    // Combina eventos de roteamento e atualizações de abas
+    combineLatest([
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd),
+        distinctUntilChanged()
+      ),
+      this.abasService.getAbas().pipe(
+        distinctUntilChanged()
+      )
+    ]).pipe(
+      takeUntil(this.destroy$),
+      debounceTime(0) // Evita múltiplas execuções no mesmo ciclo
+    ).subscribe(() => {
+      this.atualizarAbasVisiveis();
     });
   }
 
-  navegarParaAba(aba: Aba, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private atualizarAbasVisiveis(): void {
+    const urlAtual = this.router.url;
     
-    // Evitar navegação se já está na mesma aba
+    // Verifica se a rota atual pertence ao grupo
+    const pertenceAoGrupo = this.grupoRotas.some(rota => 
+      urlAtual.startsWith(rota)
+    );
+    
+    if (!pertenceAoGrupo) {
+      this.abasVisiveis = [];
+      this.mostrarComponente = false;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.mostrarComponente = true;
+    
+    // Filtra abas que pertencem a qualquer rota do grupo
+    const todasAbas = this.abasService.getAbasSync();
+    this.abasVisiveis = todasAbas.filter(aba => 
+      this.grupoRotas.some(rota => aba.link.startsWith(rota))
+    );
+    
+    this.cdr.markForCheck();
+  }
+
+  navegarParaAba(aba: Aba, event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+    
     if (this.router.url === aba.link) return;
     
-    // Forçar recriação do componente se for a aba principal
     if (aba.fixo) {
       this.router.navigateByUrl('/blank', { skipLocationChange: true }).then(() => {
         this.router.navigateByUrl(aba.link);
@@ -64,16 +100,7 @@ export class NavtabsComponent {
     }
   }
 
-  // Mantém abas fixas + abas do módulo atual
-  get abasFiltradas() {
-    return this.abasAbertas.filter(aba => 
-      aba.fixo || // Mantém todas as abas fixas
-      aba.link?.startsWith(`${this.rotaBase}`) // + abas do módulo atual
-    );
-  }
-
   rotaEstaAtiva(link: string): boolean {
-    // Verifica se a rota começa com o link da aba
     return this.router.url.startsWith(link);
   }
 
@@ -85,29 +112,21 @@ export class NavtabsComponent {
   abrirAbaAtual() {
     const rotaAtual = this.router.url;
     const partes = rotaAtual.split('/').filter(p => p);
-    const basePath = `/${partes.slice(0, 2).join('/')}`;
-    const id = partes.length >= 3 ? partes[2] : null;
+    
+    if (partes.length < 2) return;
+    
+    const basePath = `/${partes[0]}/${partes[1]}`;
+    const id = partes.length >= 3 ? partes[2] : 'novo-' + Date.now();
 
     this.abasService.abrirAba({
       basePath,
       id,
-      label: this.formatarLabel(id),
+      label: 'Nova Aba',
       navegar: false
     });
   }
 
   abrirModalAbas() {
     this.abasService.abrirModalAbas?.();
-  }
-
-  private getBaseRota(url: string): string {
-    const partes = url.split('/').filter(p => p);
-    return `/${partes.slice(0, 2).join('/')}`;
-  }
-
-  formatarLabel(id: string | null): string {
-    if (!id) return 'Principal';
-    if (id === 'novo') return 'Novo';
-    return `#${id}`;
   }
 }

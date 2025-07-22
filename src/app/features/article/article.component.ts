@@ -6,7 +6,7 @@ import { PoPageDynamicTableModule } from '@po-ui/ng-templates';
 import { PoModule } from '@po-ui/ng-components';
 import { PoPageDynamicTableOptions } from '@po-ui/ng-templates';
 import { lastValueFrom } from 'rxjs';
-import { AbasService } from '../../core/services/sessionStorage.service';
+import { ModuleTabsService } from '../../core/services/module-tabs.service';
 
 @Component({
   selector: 'app-article',
@@ -44,34 +44,27 @@ export class ArticleComponent implements OnInit{
   constructor(private api: ApiService,
     private rout: Router,
     private route: ActivatedRoute,
-    private abasService: AbasService
+    private tabs: ModuleTabsService
   ) {}
 
   ngOnInit(): void {
-    this.abasService.abrirAbaPrincipal('/admin/articles', 'Artigos', 'an-fill an-list');
-  }
+  // Garanta que o caminho está correto
+    this.tabs.initModule(
+      '/admin/articles', 
+      'Artigos', 
+      'an-fill an-list'
+    );
+}
 
-  abrirArtigo(row: any): void {
-    this.abasService.abrirAba({
-      basePath: '/admin/editor',
-      id: row.id,
-      label: `Editando ${row.nome}`,
-      dados: row
-    });
-  }
-  
-  novoArtigo(): void {
-    const novoId = 'novo-' + Date.now();
-  
-    this.abasService.abrirAba({
-      basePath: '/admin/editor',
-      id: novoId,
-      label: 'Novo Artigo',
-      dados: {
-        title: '',
-        content: '',
-        status: 'draft'
-     }
-    });
-  }
+ abrirArtigo(row: any): void {
+  this.tabs.openItem(row, '/admin/editor');
+}
+
+novoArtigo(): void {
+  this.tabs.newItem('/admin/editor', {
+    title: '',
+    content: '',
+    status: 'draft'
+  });
+}
 }

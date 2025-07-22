@@ -35,6 +35,9 @@ export class AdminComponent implements OnInit {
 
   profile: Models.profile = {  title: '', subtitle: '', img: ''};
 
+    rotasComAbas: string[] = ['/admin/articles', '/admin/editor'];
+
+ 
 
 
   // -------------^ Vars ^-----------------
@@ -117,12 +120,10 @@ menuItems: Array<poTypesUI['menuItem']> = [
  isAdmimRoute(): boolean {
     return this.rout.url.includes('/admim');
   }
-  get showNavtabs(): boolean {
-  const url = this.rout.url;
-
-  return (
-    url.startsWith('/admin/articles') ||
-    url.startsWith('/admin/editor')
-  );
-}
+    get showNavtabs(): boolean {
+    const rotasComAbas = ['/admin/articles', '/admin/editor'];
+    return rotasComAbas.some(rota => 
+      this.rout.url.startsWith(rota)
+    );
+  }
 }
