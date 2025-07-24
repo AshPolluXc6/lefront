@@ -24,6 +24,9 @@
     [maximoAbas]="10"
   ></app-navtabs>
 }
+@if(showCategoriesTabs) {
+  <app-navtabs [grupoRotas]="['/admin/categories', '/admin/category-editor']"></app-navtabs>
+}
 
     <div class="router-container">
       <router-outlet></router-outlet>

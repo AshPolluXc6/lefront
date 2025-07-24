@@ -4,7 +4,7 @@
 
 po-menu{
     position: absolute;
-    z-index: 99999999999999999999999999999;
+    z-index: 9999999999999999999999999999999999999999999999;
 }
 app-navtabs{
     overflow: visible;
@@ -14,5 +14,20 @@ app-navtabs{
 .router-container{
     overflow-y: auto;
     height: calc(100dvh - 48px);
-    margin-left: 55px;
+    margin-left: 55px; 
+    padding-top: 60px;
+}
+
+  @media (max-width: 1200px){
+    app-navtabs {
+        margin-top: 40px;
+        position: absolute;
+        width: 100%;
+        z-index: 999999;
+    }
+    
+}
+@media (max-width: 1200px){
+    .router-container{
+    padding-top: 90px;}
 }

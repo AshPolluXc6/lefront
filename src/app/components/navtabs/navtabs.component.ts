@@ -1,5 +1,5 @@
 // navtabs.component.ts
-import { Component, Input, OnDestroy, ChangeDetectorRef  } from '@angular/core';
+import { Component, Input, OnDestroy, ChangeDetectorRef, OnInit  } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { Subject, combineLatest } from 'rxjs';
@@ -14,7 +14,7 @@ import { PoIconModule } from '@po-ui/ng-components';
   templateUrl: './navtabs.component.html',
   styleUrls: ['./navtabs.component.scss']
 })
-export class NavtabsComponent implements OnDestroy {
+export class NavtabsComponent implements OnInit, OnDestroy {
   @Input() novaAbaLabel: string = '+';
   @Input() maximoAbas: number = 21;
   
@@ -53,6 +53,24 @@ export class NavtabsComponent implements OnDestroy {
       this.atualizarAbasVisiveis();
     });
   }
+  ngOnInit():void{
+       this.atualizarAbasVisiveis();
+    
+    // Observar mudanças de rota
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.atualizarAbasVisiveis();
+    });
+
+    // Observar mudanças nas abas
+    this.abasService.getAbas().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.atualizarAbasVisiveis();
+    });
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -63,22 +81,31 @@ export class NavtabsComponent implements OnDestroy {
     const urlAtual = this.router.url;
     
     // Verifica se a rota atual pertence ao grupo
-    const pertenceAoGrupo = this.grupoRotas.some(rota => 
-      urlAtual.startsWith(rota)
-    );
-    
-    if (!pertenceAoGrupo) {
+    // const pertenceAoGrupo = this.grupoRotas.some(rota => 
+    //   urlAtual.startsWith(rota)
+    // );
+
+    if (!this.grupoRotas.some(rota => urlAtual.startsWith(rota))) {
       this.abasVisiveis = [];
       this.mostrarComponente = false;
-      this.cdr.markForCheck();
       return;
     }
+    
+    // if (!pertenceAoGrupo) {
+    //   this.abasVisiveis = [];
+    //   this.mostrarComponente = false;
+    //   this.cdr.markForCheck();
+    //   return;
+    // }
 
     this.mostrarComponente = true;
     
     // Filtra abas que pertencem a qualquer rota do grupo
-    const todasAbas = this.abasService.getAbasSync();
-    this.abasVisiveis = todasAbas.filter(aba => 
+    // const todasAbas = this.abasService.getAbasSync();
+    // this.abasVisiveis = todasAbas.filter(aba => 
+    //   this.grupoRotas.some(rota => aba.link.startsWith(rota))
+    // );
+     this.abasVisiveis = this.abasService.getAbasSync().filter(aba => 
       this.grupoRotas.some(rota => aba.link.startsWith(rota))
     );
     

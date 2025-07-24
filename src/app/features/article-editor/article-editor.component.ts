@@ -8,11 +8,10 @@ import { AbasService } from '../../core/services/sessionStorage.service';
 import { debounceTime } from 'rxjs/operators';
 import { ApiService } from '../../core/services/api.service';
 import { Queries } from '../../core/querys/queries';
-import { NavtabsComponent } from '../../components/navtabs/navtabs.component';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, QuillModule, NavtabsComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, QuillModule],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
 })
@@ -28,6 +27,8 @@ export class ArticleEditorComponent implements OnInit {
   newTag: string = '';
   tags: string[] = [];
   category: any[] = [];
+
+
 
   quillModules = {
     toolbar: [
@@ -58,7 +59,6 @@ export class ArticleEditorComponent implements OnInit {
     private router: Router,
     private abasService: AbasService,
     private apiService: ApiService,
-    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -101,6 +101,7 @@ export class ArticleEditorComponent implements OnInit {
       });
 
   }
+
 
   ngAfterViewInit() {
     this.route.paramMap.subscribe(params => {

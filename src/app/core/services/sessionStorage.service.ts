@@ -21,8 +21,13 @@ export class AbasService {
   public abasAbertas$ = this.abasAbertasSubject.asObservable();
   private _abrirModalAbasFn: (() => void) | null = null;
 
-  constructor(private router: Router) {}
-
+  constructor(
+    private router: Router
+  ) {
+     const abasIniciais = this.carregarAbas();
+    this.abasAbertasSubject.next(abasIniciais);
+  }
+  
  abrirAbaPrincipal(basePath: string, label: string, icon?: string): void {
   const abas = this.abasAbertasSubject.getValue();
   const modulo = basePath.split('/').pop() || '';

@@ -6,6 +6,7 @@ import { AuthGuard } from './core/guards/guard.service';
 import { ArticleEditorComponent } from './features/article-editor/article-editor.component';
 import { BlankComponent } from './components/blank/blank';
 import { ArticleReadComponent } from './features/article-read/article-read.component';
+import { CategoriesComponent } from './features/categories/categories.component';
 
 export const routes: Routes = [
 
@@ -35,9 +36,13 @@ export const routes: Routes = [
                 component: ArticleComponent
             },
             {
-            path: 'editor/:id',
-            component: ArticleEditorComponent
-            }
+                path: 'editor/:id',
+                component: ArticleEditorComponent
+            },
+            {
+                path: 'categories',
+                component: CategoriesComponent,
+            }   
         ]
     },
     { 
@@ -58,5 +63,6 @@ export const routes: Routes = [
     {
     path: 'blank',
     component: BlankComponent 
-    }
+    },
+    
 ];
