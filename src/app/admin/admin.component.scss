@@ -4,11 +4,10 @@
 
 po-menu{
     position: absolute;
-    z-index: 9999999999999999999999999999999999999999999999;
+    z-index: 3;
 }
 app-navtabs{
     overflow: visible;
-    z-index: 1;
 }
 
 .router-container{
@@ -23,7 +22,6 @@ app-navtabs{
         margin-top: 40px;
         position: absolute;
         width: 100%;
-        z-index: 999999;
     }
     
 }

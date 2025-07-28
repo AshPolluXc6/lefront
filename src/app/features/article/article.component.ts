@@ -3,7 +3,7 @@ import { ApiService } from '../../core/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Queries } from '../../core/querys/queries';
 import { PoPageDynamicTableModule } from '@po-ui/ng-templates';
-import { PoModule } from '@po-ui/ng-components';
+import { ICONS_DICTIONARY, PoModule } from '@po-ui/ng-components';
 import { PoPageDynamicTableOptions } from '@po-ui/ng-templates';
 import { lastValueFrom } from 'rxjs';
 import { ModuleTabsService } from '../../core/services/module-tabs.service';
@@ -36,12 +36,12 @@ export class ArticleComponent implements OnInit{
     {
       label: 'Abrir',
       action: this.abrirArtigo.bind(this),
-      icon: 'po-icon-eye'
+      icon: 'an-fill an-book-open-user'
     }
   ];
+
   readonly actions = {
     new: this.novoArtigo.bind(this),
-      remove: this.onRemove.bind(this), 
     removeAll: this.onRemoveAll.bind(this) 
   };
 
