@@ -1,1 +1,103 @@
 <p>categories works!</p>
+  <div class="tree-view-container">
+      <!-- Filter Controls -->
+      <div class="filter-controls">
+        <div class="filter-row">
+          <div class="search-input">
+            <input 
+              type="text" 
+              [(ngModel)]="searchText" 
+              (ngModelChange)="onFilterChange()"
+              placeholder="Buscar em todos os campos..."
+              class="form-control">
+          </div>
+          
+          <div class="level-filter">
+            <select [(ngModel)]="filterByLevel" (ngModelChange)="onFilterChange()" class="form-select">
+              <option [ngValue]="0">Todos os níveis</option>
+              <option *ngFor="let level of getLevels()" [ngValue]="level">Nível {{ level }}</option>
+            </select>
+          </div>
+          
+          <div class="parent-filter">
+            <select [(ngModel)]="filterByParent" (ngModelChange)="onFilterChange()" class="form-select">
+              <option [ngValue]="null">Todos os pais</option>
+              <option *ngFor="let parent of getParentNodes()" [value]="parent.id">{{ parent.label }}</option>
+            </select>
+          </div>
+
+          <button (click)="clearFilters()" class="btn btn-clear">Limpar Filtros</button>
+        </div>
+
+        <!-- Level Expansion Controls -->
+        <div class="level-controls">
+          <span class="level-label">Expandir níveis:</span>
+          <button 
+            *ngFor="let level of getLevels()" 
+            (click)="expandToLevel(level)"
+            class="btn btn-level"
+            [class.active]="level <= currentExpandedLevel">
+            {{ level }}
+          </button>
+          <button (click)="closeAll()" class="btn btn-collapse">Fechar Tudo</button>
+        </div>
+      </div>
+
+      <!-- Tree Table -->
+      <div class="tree-table-container">
+        <table class="tree-table">
+          <thead>
+            <tr>
+              <th class="expand-column">Nível</th>
+              <th class="label-column">Label</th>
+              <th class="value-column">Valor</th>
+              <th class="description-column">Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let node of displayNodes; trackBy: trackByNodeId" 
+                class="tree-row" 
+                [class.level-1]="node.level === 1"
+                [class.level-2]="node.level === 2"
+                [class.level-3]="node.level === 3"
+                [class.level-4]="node.level === 4">
+              
+              <!-- Level/Expand Column -->
+              <td class="expand-column">
+                <div class="level-indicators">
+                  <!-- Level indicators -->
+                  <span *ngFor="let i of getIndentArray(node.level)" class="level-dot">
+                    <span *ngIf="i < node.level - 1" class="dot">·</span>
+                    <span *ngIf="i === node.level - 1 && hasChildren(node)" 
+                          class="expand-icon" 
+                          (click)="toggleNode(node.id)">
+                      {{ node.expanded ? '−' : '+' }}
+                    </span>
+                    <span *ngIf="i === node.level - 1 && !hasChildren(node)" class="leaf-icon">·</span>
+                  </span>
+                </div>
+              </td>
+
+              <!-- Label Column -->
+              <td class="label-column">
+                <div class="label-content" [style.padding-left.px]="(node.level - 1) * 20">
+                  {{ node.label }}
+                </div>
+              </td>
+
+              <!-- Value Column -->
+              <td class="value-column">{{ node.value }}</td>
+
+              <!-- Description Column -->
+              <td class="description-column">{{ node.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Results Info -->
+      <div class="results-info">
+        Mostrando {{ displayNodes.length }} de {{ totalNodes }} itens
+        <span *ngIf="hasActiveFilters()"> (filtrado)</span>
+      </div>
+    </div>
