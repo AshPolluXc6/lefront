@@ -17,16 +17,8 @@
       p-mask=""
       ></po-toolbar>
 
-    @if(showNavtabs) {
-  <app-navtabs 
-    [grupoRotas]="rotasComAbas"
-    novaAbaLabel="+" 
-    [maximoAbas]="10"
-  ></app-navtabs>
-}
-@if(showCategoriesTabs) {
-  <app-navtabs [grupoRotas]="['/admin/categories', '/admin/category-editor']"></app-navtabs>
-}
+    @if(showNavtabs) { <app-navtabs [grupoRotas]="rotasComAbas"></app-navtabs> }
+    <!-- @if(showCategoriesTabs) { <app-navtabs [grupoRotas]="['/admin/categories']"></app-navtabs> } -->
 
     <div class="router-container">
       <router-outlet></router-outlet>
