@@ -53,17 +53,28 @@
               <th class="description-column">Descrição</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody
+                cdkDropList
+                cdkDropListGroup
+                [cdkDropListData]="displayNodes"
+                [cdkDropListOrientation]="'vertical'"
+                (cdkDropListDropped)="'...'"
+          >
+            
             <tr *ngFor="let node of displayNodes; trackBy: trackByNodeId" 
                 class="tree-row" 
                 [class.level-1]="node.level === 1"
                 [class.level-2]="node.level === 2"
                 [class.level-3]="node.level === 3"
-                [class.level-4]="node.level === 4">
-              
+                [class.level-4]="node.level === 4"
+                cdkDrag
+                >
               <!-- Level/Expand Column -->
-              <td class="expand-column">
-                <div class="level-indicators">
+               <td class="expand-column" >
+                 <span class="drag-handle" cdkDragHandle>☰</span>
+               </td>
+              <td class="expand-column" >
+                <div class="level-indicators" >
                   <!-- Level indicators -->
                   <span *ngFor="let i of getIndentArray(node.level)" class="level-dot">
                     <span *ngIf="i < node.level - 1" class="dot">·</span>

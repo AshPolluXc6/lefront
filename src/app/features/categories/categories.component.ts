@@ -5,11 +5,19 @@ import { Subject, takeUntil } from 'rxjs';
 import { TreeNode, FilterOptions } from './tree-node.intercafe';
 import { TreeViewService } from './tree-view.service';
 import { ModuleTabsService } from '../../core/services/module-tabs.service';
+import { moveItemInArray, CdkDragDrop, CdkDrag, CdkDropList, CdkDropListGroup, DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @Component({
   selector: 'app-categories',
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DragDropModule,
+    CdkDropListGroup,
+    CdkDropList,
+    CdkDrag,
+  ],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss'
 })
@@ -568,7 +576,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // this.tabs.initModule('/admin/categories', 'Categoria', 'an-fill an-list');
+    this.tabs.initModule('/admin/categories', 'Categoria', 'an-fill an-list');
 
     this.treeViewService.setNodes(this.data);
 
@@ -665,4 +673,12 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     traverse(nodes);
     return result;
   }
+
+  // onDrop(event: CdkDragDrop<TreeNode[]>) {
+  //   if (event.previousIndex !== event.currentIndex) {
+  //     moveItemInArray(this.displayNodes, event.previousIndex, event.currentIndex);
+  //     // Se quiser reprocessar parentId e level, faça aqui
+  //     this.treeViewService.updateOrder(this.displayNodes);
+  //   }
+  // }
 }

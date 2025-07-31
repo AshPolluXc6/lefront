@@ -128,9 +128,9 @@ menuItems: Array<poTypesUI['menuItem']> = [
     );
   }
 
-  // get showCategoriesTabs(): boolean {
-  // return ['/admin/categories'].some(
-  //   rota => this.rout.url.startsWith(rota)
-  // );
-  // }
+  get showCategoriesTabs(): boolean {
+  return ['/admin/categories'].some(
+    rota => this.rout.url.startsWith(rota)
+  );
+  }
 }

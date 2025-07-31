@@ -18,7 +18,7 @@
       ></po-toolbar>
 
     @if(showNavtabs) { <app-navtabs [grupoRotas]="rotasComAbas"></app-navtabs> }
-    <!-- @if(showCategoriesTabs) { <app-navtabs [grupoRotas]="['/admin/categories']"></app-navtabs> } -->
+    @if(showCategoriesTabs) { <app-navtabs [grupoRotas]="['/admin/categories']"></app-navtabs> }
 
     <div class="router-container">
       <router-outlet></router-outlet>

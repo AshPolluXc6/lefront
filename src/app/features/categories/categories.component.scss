@@ -124,19 +124,36 @@
 }
 
 .tree-table {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+
+  thead {
+    // border: solid 3px red;
+    display: flex;
+    width: 100%;
+    
+    tr{
+      display: flex;
+      width: 100%;
+      
+    }
+
+    th {
+      flex-grow: 1;
+      background-color: #f8f9fa;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      color: #495057;
+      // border: solid 5px blue;
+    }
+  }
 }
 
-.tree-table thead th {
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #dee2e6;
-  padding: 12px;
-  text-align: left;
-  font-weight: 600;
-  color: #495057;
-}
+
 
 .tree-table tbody td {
   padding: 10px 12px;
@@ -149,24 +166,13 @@
 }
 
 /* Column Widths */
-.expand-column {
-  width: 120px;
-  min-width: 120px;
-}
-
-.label-column {
-  width: 300px;
-  min-width: 200px;
-}
-
-.value-column {
-  width: 200px;
-  min-width: 150px;
-}
-
-.description-column {
-  flex: 1;
-  min-width: 200px;
+.expand-column,
+.label-column,
+.value-column,
+.description-column{
+  min-width: 50px;
+  color: #495057;
+  // border: solid 1px;
 }
 
 /* Level Indicators */
@@ -301,17 +307,14 @@
   }
 
   .expand-column {
-    width: 80px;
     min-width: 80px;
   }
 
   .label-column {
-    width: 180px;
     min-width: 150px;
   }
 
   .value-column {
-    width: 120px;
     min-width: 100px;
   }
 }
@@ -414,4 +417,50 @@ html {
     border: 1px solid #000 !important;
     padding: 8px !important;
   }
+}
+
+________________________________cdkDraagDop styles ________________________________
+.tree-row {
+  transition: background-color 0.2s ease;
+}
+
+.tree-row.cdk-drag-preview {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  background-color: #f4f4f4;
+  padding: 8px;
+  opacity: 0.95;
+}
+
+.tree-row.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.tree-row.cdk-drag-animating {
+  transition: transform 250ms ease;
+}
+
+/* ⬇️ Estilo do drag handle */
+.drag-handle {
+  cursor: move;
+  font-size: 1.2rem;
+  padding: 4px 8px;
+  user-select: none;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.drag-handle:hover {
+  color: #111;
+}
+
+/* ⬇️ Opcional: linha destacada ao passar o mouse */
+.tree-row:hover {
+  background-color: #f9f9f9;
+}
+
+/* ⬇️ Espaçamento entre colunas, para visual melhor */
+td {
+  padding: 8px 12px;
+  vertical-align: middle;
 }
