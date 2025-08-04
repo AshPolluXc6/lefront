@@ -67,40 +67,53 @@
                 [class.level-2]="node.level === 2"
                 [class.level-3]="node.level === 3"
                 [class.level-4]="node.level === 4"
+                [class.hover-target]="hoveredNodeId === node.id"
                 [cdkDragData]="node"
                 cdkDrag
+                (cdkDragEntered)="onDragEntered(node)"
+              (cdkDragExited)="onDragExited()"
                 >
               <!-- Level/Expand Column -->
-               <td class="expand-column" >
-                 <span class="drag-handle" cdkDragHandle>☰</span>
-               </td>
-              <td class="expand-column" >
-                <div class="level-indicators" >
-                  <!-- Level indicators -->
-                  <span *ngFor="let i of getIndentArray(node.level)" class="level-dot">
-                    <span *ngIf="i < node.level - 1" class="dot">·</span>
-                    <span *ngIf="i === node.level - 1 && hasChildren(node)" 
-                          class="expand-icon" 
-                          (click)="toggleNode(node.id)">
-                      {{ node.expanded ? '−' : '+' }}
-                    </span>
-                    <span *ngIf="i === node.level - 1 && !hasChildren(node)" class="leaf-icon">·</span>
+          <td class="expand-column">
+            <div class="drag-container">
+              <div class="level-indicators">
+                <!-- Level indicators -->
+                <span *ngFor="let i of getIndentArray(node.level)" class="level-dot">
+                  <span *ngIf="i < node.level - 1" class="dot">·</span>
+                  <span *ngIf="i === node.level - 1 && hasChildren(node)" 
+                        class="expand-icon" 
+                        (click)="toggleNode(node.id)">
+                    {{ node.expanded ? '−' : '+' }}
                   </span>
-                </div>
-              </td>
+                  <span *ngIf="i === node.level - 1 && !hasChildren(node)" class="leaf-icon">·</span>
+                </span>
+              </div>
+            </div>
+          </td>
 
               <!-- Label Column -->
-              <td class="label-column">
-                <div class="label-content" [style.padding-left.px]="(node.level - 1) * 20">
-                  {{ node.label }}
-                </div>
-              </td>
+          <td class="label-column">
+            <div class="drag-container">
+              <div class="label-content" [style.padding-left.px]="(node.level - 1) * 20">
+                {{ node.label }}
+              </div>
+            </div>
+          </td>
 
               <!-- Value Column -->
-              <td class="value-column">{{ node.value }}</td>
+          <td class="value-column">
+            <div class="drag-container">
+              {{ node.value }}
+            </div>
+          </td>
 
               <!-- Description Column -->
-              <td class="description-column">{{ node.description }}</td>
+              <td class="description-column">
+                <div class="drag-container">
+                  {{ node.description }}
+                </div>
+              </td>
+              
             </tr>
           </tbody>
         </table>

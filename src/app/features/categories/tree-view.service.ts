@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TreeNode, FilterOptions } from './tree-node.intercafe';
 
 @Injectable({
@@ -12,9 +12,16 @@ export class TreeViewService {
   private _filterOptions = new BehaviorSubject<FilterOptions>({ searchText: '' });
 
   nodes$ = this._nodes.asObservable();
-  filteredNodes$ = this._filteredNodes.asObservable();
+  // filteredNodes$ = this._filteredNodes.asObservable();
   maxLevel$ = this._maxLevel.asObservable();
   filterOptions$ = this._filterOptions.asObservable();
+
+  get currentFilteredNodes(): TreeNode[] {
+  return this._filteredNodes.value;
+  }
+  get filteredNodes$(): Observable<TreeNode[]> {
+  return this._filteredNodes.asObservable();
+  }
 
   setNodesPreservingState(newNodes: TreeNode[]): void {
     const oldFlat = this.flattenAllNodes(this._nodes.value);

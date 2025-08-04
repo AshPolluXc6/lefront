@@ -471,3 +471,28 @@ td {
   padding: 8px 12px;
   vertical-align: middle;
 }
+.tree-row.hover-target {
+  background-color: rgba(30, 144, 255, 0.50);
+}
+
+.drag-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 8px 0; // Ajuste conforme seu layout
+}
+
+.expand-column .drag-container {
+  justify-content: center;
+}
+
+.label-column .drag-container,
+.value-column .drag-container,
+.description-column .drag-container {
+  justify-content: flex-start;
+}
+
+td {
+  padding: 0 !important; // Remover padding padrão das células
+}

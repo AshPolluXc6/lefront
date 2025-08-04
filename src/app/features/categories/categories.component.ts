@@ -562,6 +562,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   totalNodes = 0;
   maxLevel = 0;
   currentExpandedLevel = 0;
+  hoveredNodeId: string | null = null;
+  dragHoverTimeout: any = null;
 
   // Filter properties
   searchText = '';
@@ -716,38 +718,232 @@ insertAsSibling(parent: TreeNode | undefined, target: TreeNode, newNode: TreeNod
   }
 }
 
+onDragEntered(node: TreeNode) {
+  console.log(`[Drag] Entered node: ${node.id} (${node.label})`);
 
-onDrop(event: CdkDragDrop<TreeNode[]>) {
-  const movedNode = event.item.data as TreeNode;
-  const targetNode = this.displayNodes[event.currentIndex];
-
-  if (!movedNode || !targetNode || movedNode.id === targetNode.id) return;
-
-  // Clonar antes de remover
-  const cloneNode = this.deepCloneNode(movedNode);
-  this.removeNodeById(this.data, movedNode.id);
-
-  // ⚠️ lógica de decisão
-  if (targetNode.level < movedNode.level) {
-    // subir nível → colocar como irmão do pai
-    const newParent = this.findNodeById(this.data, targetNode.parentId);
-    cloneNode.parentId = newParent?.id ?? undefined;
-    cloneNode.level = targetNode.level;
-    this.insertAsSibling(newParent, targetNode, cloneNode);
-  } else if (targetNode.level === movedNode.level) {
-    // mesma hierarquia → movimentação lateral
-    const parent = this.findNodeById(this.data, targetNode.parentId);
-    cloneNode.parentId = parent?.id ?? undefined;
-    cloneNode.level = targetNode.level;
-    this.insertAsSibling(parent, targetNode, cloneNode);
-  } else {
-    // caiu num nível mais profundo → vira filho
-    targetNode.expanded = true;
-    cloneNode.parentId = targetNode.id;
-    cloneNode.level = targetNode.level + 1;
-    (targetNode.children ??= []).push(cloneNode);
+  // Limpar timeout anterior
+  if (this.dragHoverTimeout) {
+    console.log('Clearing previous hover timeout');
+    clearTimeout(this.dragHoverTimeout);
+    this.dragHoverTimeout = null;
   }
 
-  this.treeViewService. setNodesPreservingState(this.data);
+  this.hoveredNodeId = node.id;
+  console.log(`Hovered node set to: ${this.hoveredNodeId}`);
+  
+  // Expandir após delay se nó tiver filhos e estiver fechado
+  if (node.children && node.children.length > 0 && !node.expanded) {
+    console.log(`Setting expand timeout for node: ${node.id} (has children, not expanded)`);
+    
+    this.dragHoverTimeout = setTimeout(() => {
+      console.log(`Timeout triggered - expanding node: ${node.id}`);
+      this.toggleNode(node.id);
+      // Manter o hover após expandir
+      this.hoveredNodeId = node.id;
+      console.log(`Node expanded. Hovered node remains: ${this.hoveredNodeId}`);
+    }, 800);
+  } else {
+    if (!node.children || node.children.length === 0) {
+      console.log(`Node ${node.id} has no children - no expansion needed`);
+    } else if (node.expanded) {
+      console.log(`Node ${node.id} is already expanded`);
+    }
+  }
 }
+
+onDragExited() {
+  console.log('[Drag] Exited from node');
+  
+  // Limpar timeout ao sair do nó
+  if (this.dragHoverTimeout) {
+    console.log('Clearing hover timeout due to exit');
+    clearTimeout(this.dragHoverTimeout);
+    this.dragHoverTimeout = null;
+  }
+  
+  console.log(`Clearing hovered node (was: ${this.hoveredNodeId})`);
+  this.hoveredNodeId = null;
+}
+
+onDrop(event: CdkDragDrop<TreeNode[]>) {
+  console.log('[Drag] Drop event triggered');
+  
+  // Guardar o hoveredNodeId antes de limpar
+  const currentHoveredNodeId = this.hoveredNodeId;
+  
+  // Limpar timeout no momento do drop
+  if (this.dragHoverTimeout) {
+    console.log('Clearing hover timeout due to drop');
+    clearTimeout(this.dragHoverTimeout);
+    this.dragHoverTimeout = null;
+  }
+  
+  const movedNode = event.item.data as TreeNode;
+  const targetNode = this.displayNodes[event.currentIndex];
+  
+  // Usar o ID guardado
+  const hoveredNode = currentHoveredNodeId 
+    ? this.findNodeById(this.data, currentHoveredNodeId)
+    : null;
+
+  console.log('Drop details:');
+  console.log(`- Moved node: ${movedNode?.id} (${movedNode?.label})`);
+  console.log(`- Target node: ${targetNode?.id} (${targetNode?.label})`);
+  console.log(`- Hovered node: ${hoveredNode?.id} (${hoveredNode?.label})`);
+
+  // Evitar operações inválidas
+  if (!movedNode || !targetNode) {
+    console.error('Invalid drop: missing movedNode or targetNode');
+    this.hoveredNodeId = null;
+    return;
+  }
+  
+  if (movedNode.id === targetNode.id) {
+    console.error('Invalid drop: same node');
+    this.hoveredNodeId = null;
+    return;
+  }
+
+  // Verificar se é uma operação válida
+  if (hoveredNode && this.isDescendant(movedNode, hoveredNode)) {
+    console.error('Invalid drop: cannot move node into its own descendant');
+    this.hoveredNodeId = null;
+    return;
+  }
+
+  // 1. Tentar usar hoveredNode como pai
+  if (hoveredNode && hoveredNode.id !== movedNode.id) {
+    console.log(`Moving node ${movedNode.id} as child of ${hoveredNode.id}`);
+    
+    const cloneNode = this.deepCloneNode(movedNode);
+    this.removeNodeById(this.data, movedNode.id);
+    
+    // Configurar novo parentesco
+    cloneNode.parentId = hoveredNode.id;
+    cloneNode.level = hoveredNode.level + 1;
+    
+    // Garantir array de filhos
+    if (!hoveredNode.children) {
+      console.log(`Creating children array for node ${hoveredNode.id}`);
+      hoveredNode.children = [];
+    }
+    
+    console.log(`Adding node ${cloneNode.id} to children of ${hoveredNode.id}`);
+    hoveredNode.children.push(cloneNode);
+    
+    // Expandir pai automaticamente
+    if (!hoveredNode.expanded) {
+      console.log(`Expanding parent node ${hoveredNode.id}`);
+      hoveredNode.expanded = true;
+    }
+  } 
+  // 2. Fallback: mover como irmão do target
+  else {
+    console.log(`Moving node ${movedNode.id} as sibling of ${targetNode.id}`);
+    
+    const cloneNode = this.deepCloneNode(movedNode);
+    this.removeNodeById(this.data, movedNode.id);
+    
+    const newParent = this.findNodeById(this.data, targetNode.parentId);
+    const siblings = newParent?.children || this.data;
+    
+    cloneNode.parentId = newParent?.id;
+    cloneNode.level = targetNode.level;
+    
+    console.log(`New parent: ${newParent?.id || 'root'}`);
+    
+    const index = siblings.findIndex(n => n.id === targetNode.id);
+    if (index >= 0) {
+      console.log(`Inserting after sibling at index ${index}`);
+      siblings.splice(index + 1, 0, cloneNode);
+    } else {
+      console.log('Target not found in siblings - appending to end');
+      siblings.push(cloneNode);
+    }
+  }
+
+  console.log('Drop operation completed. Updating tree view.');
+  this.hoveredNodeId = null;
+  
+  // Atualizar o serviço
+  this.treeViewService.setNodesPreservingState(this.data);
+  
+  // Forçar atualização da visualização
+}
+
+private isDescendant(parent: TreeNode, child: TreeNode): boolean {
+  if (!parent || !child) {
+    console.log(`isDescendant check: ${!!parent} parent, ${!!child} child - returning false`);
+    return false;
+  }
+  
+  console.log(`Checking if ${child.id} is descendant of ${parent.id}`);
+  
+  let current: TreeNode | undefined = child;
+  let depth = 0;
+  const maxDepth = 10;
+  
+  while (current && depth < maxDepth) {
+    if (current.parentId === parent.id) {
+      console.log(`Direct descendant found at depth ${depth}`);
+      return true;
+    }
+    
+    // Corrigir: buscar o pai atual
+    current = current.parentId ? this.findNodeById(this.data, current.parentId) : undefined;
+    depth++;
+  }
+  
+  console.log('No descendant relationship found');
+  return false;
+}
+  
+
+// onDrop(event: CdkDragDrop<TreeNode[]>) {
+//   const movedNode = event.item.data as TreeNode;
+//   const targetNode = this.displayNodes[event.currentIndex];
+//   const hoveredNode = this.findNodeById(this.data, this.hoveredNodeId ?? '');
+
+//   if (!movedNode || !targetNode || movedNode.id === targetNode.id) return;
+
+//   // Clonar antes de remover
+//   const cloneNode = this.deepCloneNode(movedNode);
+//   this.removeNodeById(this.data, movedNode.id);
+//   this.hoveredNodeId = null;
+
+//   // ⚠️ lógica de decisão
+//   // if (targetNode.level < movedNode.level) {
+//   //   // subir nível → colocar como irmão do pai
+//   //   const newParent = this.findNodeById(this.data, targetNode.parentId);
+//   //   cloneNode.parentId = newParent?.id ?? undefined;
+//   //   cloneNode.level = targetNode.level;
+//   //   this.insertAsSibling(newParent, targetNode, cloneNode);
+//   // } else if (targetNode.level === movedNode.level) {
+//   //   // mesma hierarquia → movimentação lateral
+//   //   const parent = this.findNodeById(this.data, targetNode.parentId);
+//   //   cloneNode.parentId = parent?.id ?? undefined;
+//   //   cloneNode.level = targetNode.level;
+//   //   this.insertAsSibling(parent, targetNode, cloneNode);
+//   // } else {
+//   //   // caiu num nível mais profundo → vira filho
+//   //   targetNode.expanded = true;
+//   //   cloneNode.parentId = targetNode.id;
+//   //   cloneNode.level = targetNode.level + 1;
+//   //   (targetNode.children ??= []).push(cloneNode);
+//   // }
+//   if (hoveredNode) {
+//     hoveredNode.expanded = true;
+//     cloneNode.parentId = hoveredNode.id;
+//     cloneNode.level = hoveredNode.level + 1;
+//     (hoveredNode.children ??= []).push(cloneNode);
+//   } else {
+//     // fallback: lógica anterior (pode manter ou adaptar)
+//     const newParent = this.findNodeById(this.data, targetNode.parentId);
+//     cloneNode.parentId = newParent?.id ?? undefined;
+//     cloneNode.level = targetNode.level;
+//     this.insertAsSibling(newParent, targetNode, cloneNode);
+//   }
+
+//   this.treeViewService. setNodesPreservingState(this.data);
+// }
 }
