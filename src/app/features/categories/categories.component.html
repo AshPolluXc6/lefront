@@ -58,7 +58,7 @@
                 cdkDropListGroup
                 [cdkDropListData]="displayNodes"
                 [cdkDropListOrientation]="'vertical'"
-                (cdkDropListDropped)="'...'"
+                (cdkDropListDropped)="onDrop($event)"
           >
             
             <tr *ngFor="let node of displayNodes; trackBy: trackByNodeId" 
@@ -67,6 +67,7 @@
                 [class.level-2]="node.level === 2"
                 [class.level-3]="node.level === 3"
                 [class.level-4]="node.level === 4"
+                [cdkDragData]="node"
                 cdkDrag
                 >
               <!-- Level/Expand Column -->

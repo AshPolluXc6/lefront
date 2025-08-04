@@ -231,6 +231,10 @@
 }
 
 /* Level-specific styles */
+
+.tree-row {
+  transition: 150ms;
+}
 .tree-row.level-1 {
   background-color: rgba(0, 123, 255, 0.02);
 }
@@ -430,6 +434,9 @@ ________________________________cdkDraagDop styles _____________________________
   background-color: #f4f4f4;
   padding: 8px;
   opacity: 0.95;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .tree-row.cdk-drag-placeholder {

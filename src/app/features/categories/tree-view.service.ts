@@ -16,12 +16,50 @@ export class TreeViewService {
   maxLevel$ = this._maxLevel.asObservable();
   filterOptions$ = this._filterOptions.asObservable();
 
-  setNodes(nodes: TreeNode[]): void {
-    const processedNodes = this.processNodes(nodes);
-    this._nodes.next(processedNodes);
-    this._maxLevel.next(this.calculateMaxLevel(processedNodes));
+  setNodesPreservingState(newNodes: TreeNode[]): void {
+    const oldFlat = this.flattenAllNodes(this._nodes.value);
+    const expandedMap = new Map<string, boolean>();
+    const visibilityMap = new Map<string, boolean>();
+
+    // Salva o estado atual dos nós antigos
+    oldFlat.forEach(node => {
+      expandedMap.set(node.id, node.expanded ?? false );
+      visibilityMap.set(node.id, node.visible ?? true );
+    });
+
+    // Reprocessa os nós, mas tenta preservar os estados anteriores
+    const processed = this.processNodesPreservingState(newNodes, expandedMap, visibilityMap);
+
+    this._nodes.next(processed);
+    this._maxLevel.next(this.calculateMaxLevel(processed));
     this.applyFilters();
   }
+
+  private processNodesPreservingState(
+    nodes: TreeNode[],
+    expandedMap: Map<string, boolean>,
+    visibilityMap: Map<string, boolean>,
+    level: number = 1,
+    parentId?: string
+  ): TreeNode[] {
+    return nodes.map(node => {
+      const preservedExpanded = expandedMap.get(node.id) ?? false;
+      const preservedVisible = visibilityMap.get(node.id) ?? true;
+
+      return {
+        ...node,
+        level,
+        parentId,
+        expanded: preservedExpanded,
+        visible: preservedVisible,
+        children: node.children
+          ? this.processNodesPreservingState(node.children, expandedMap, visibilityMap, level + 1, node.id)
+          : []
+      };
+    });
+  }
+
+
 
   private processNodes(nodes: TreeNode[], level: number = 1, parentId?: string): TreeNode[] {
     return nodes.map(node => ({

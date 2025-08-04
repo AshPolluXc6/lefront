@@ -570,6 +570,15 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+ private deepCloneNode(node: TreeNode): TreeNode {
+  return {
+    ...node,
+    children: node.children ? node.children.map(child => this.deepCloneNode(child)) : []
+  };
+}
+
+
+
   constructor(
     private treeViewService: TreeViewService,
     private tabs: ModuleTabsService
@@ -578,7 +587,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.tabs.initModule('/admin/categories', 'Categoria', 'an-fill an-list');
 
-    this.treeViewService.setNodes(this.data);
+    this.treeViewService. setNodesPreservingState(this.data);
 
     this.treeViewService.filteredNodes$
       .pipe(takeUntil(this.destroy$))
@@ -674,11 +683,71 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  // onDrop(event: CdkDragDrop<TreeNode[]>) {
-  //   if (event.previousIndex !== event.currentIndex) {
-  //     moveItemInArray(this.displayNodes, event.previousIndex, event.currentIndex);
-  //     // Se quiser reprocessar parentId e level, faça aqui
-  //     this.treeViewService.updateOrder(this.displayNodes);
-  //   }
-  // }
+  removeNodeById(nodes: TreeNode[], nodeId: string): boolean {
+  for (let i = 0; i < nodes.length; i++) {
+    if (nodes[i].id === nodeId) {
+      nodes.splice(i, 1);
+      return true;
+    }
+    if (this.removeNodeById(nodes[i].children ?? [], nodeId)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+findNodeById(nodes: TreeNode[], id: string | undefined): TreeNode | undefined {
+  if (!id) return undefined;
+  for (const node of nodes) {
+    if (node.id === id) return node;
+    const found = this.findNodeById(node.children ?? [], id);
+    if (found) return found;
+  }
+  return undefined;
+}
+
+insertAsSibling(parent: TreeNode | undefined, target: TreeNode, newNode: TreeNode) {
+  const siblings = parent?.children ?? this.data;
+  const index = siblings.findIndex(n => n.id === target.id);
+  if (index >= 0) {
+    siblings.splice(index + 1, 0, newNode); // insere depois do target
+  } else {
+    siblings.push(newNode); // fallback
+  }
+}
+
+
+onDrop(event: CdkDragDrop<TreeNode[]>) {
+  const movedNode = event.item.data as TreeNode;
+  const targetNode = this.displayNodes[event.currentIndex];
+
+  if (!movedNode || !targetNode || movedNode.id === targetNode.id) return;
+
+  // Clonar antes de remover
+  const cloneNode = this.deepCloneNode(movedNode);
+  this.removeNodeById(this.data, movedNode.id);
+
+  // ⚠️ lógica de decisão
+  if (targetNode.level < movedNode.level) {
+    // subir nível → colocar como irmão do pai
+    const newParent = this.findNodeById(this.data, targetNode.parentId);
+    cloneNode.parentId = newParent?.id ?? undefined;
+    cloneNode.level = targetNode.level;
+    this.insertAsSibling(newParent, targetNode, cloneNode);
+  } else if (targetNode.level === movedNode.level) {
+    // mesma hierarquia → movimentação lateral
+    const parent = this.findNodeById(this.data, targetNode.parentId);
+    cloneNode.parentId = parent?.id ?? undefined;
+    cloneNode.level = targetNode.level;
+    this.insertAsSibling(parent, targetNode, cloneNode);
+  } else {
+    // caiu num nível mais profundo → vira filho
+    targetNode.expanded = true;
+    cloneNode.parentId = targetNode.id;
+    cloneNode.level = targetNode.level + 1;
+    (targetNode.children ??= []).push(cloneNode);
+  }
+
+  this.treeViewService. setNodesPreservingState(this.data);
+}
 }

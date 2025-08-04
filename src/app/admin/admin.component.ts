@@ -68,6 +68,7 @@ menuItems: Array<poTypesUI['menuItem']> = [
       {
         label:'Categorias',
         icon: 'an-fill an-text-indent',
+        action: () => this.goToCategories(),
         link: '',
         shortLabel:'Categorias',
       },
@@ -113,6 +114,9 @@ menuItems: Array<poTypesUI['menuItem']> = [
 
   goToArticles(){
     this.rout.navigate(['/admin/articles']);
+  }
+  goToCategories(){
+    this.rout.navigate(['/admin/categories']);
   }
 
 
