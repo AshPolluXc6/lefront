@@ -867,7 +867,7 @@ onDrop(event: CdkDragDrop<TreeNode[]>) {
   
   // Atualizar o serviço
   this.treeViewService.setNodesPreservingState(this.data);
-  
+  console.log(this.data);
   // Forçar atualização da visualização
 }
 
